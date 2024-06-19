@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.ActivityMainBinding
 import com.mfo.instagramclone.ui.login.LoginActivity
 import com.mfo.instagramclone.utils.PreferencesHelper
@@ -16,6 +20,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private fun initUI() {
         initUIState()
         initUIListeners()
+        initNavigation()
     }
 
     private fun initUIState() {
@@ -48,10 +54,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUIListeners() {
-        binding.btnOutLog.setOnClickListener {
+        /*binding.btnOutLog.setOnClickListener {
             clearSessionPreferences()
             goToLogin()
-        }
+        }*/
+    }
+
+    private fun initNavigation() {
+        val navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHost.navController
+        binding.bottomNavView.setupWithNavController(navController)
     }
 
     private fun loadingState() {

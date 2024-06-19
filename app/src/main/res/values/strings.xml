@@ -7,4 +7,11 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="btn_create_account">Create new account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Bottom bar -->
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
 </resources>
