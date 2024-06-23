@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">InstagramClone</string>
 
+    <!-- descriptions -->
+    <string name="ic_user">Icon user</string>
+
     <!-- login -->
     <string name="description_ic_instagram">Icon Instagram</string>
     <string name="btn_login">Login</string>
@@ -14,4 +17,12 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
+
+    <!-- Profile -->
+    <string name="tv_posts">Posts</string>
+    <string name="tv_followers">Followers</string>
+    <string name="tv_followings">Followings</string>
+    <string name="btn_edit_profile">Edit profile</string>
+    <string name="btn_share_profile">Share profile</string>
+    <string name="description_iv_post">Image post</string>
 </resources>
