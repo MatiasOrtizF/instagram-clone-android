@@ -25,4 +25,13 @@
     <string name="btn_edit_profile">Edit profile</string>
     <string name="btn_share_profile">Share profile</string>
     <string name="description_iv_post">Image post</string>
+
+    <!-- Post detail -->
+    <string name="description_ic_back">Image back</string>
+    <string name="tv_post">Post</string>
+    <string name="description_btn_iv_profile">Image profile</string>
+    <string name="description_ic_verified">Icon verified</string>
+    <string name="description_ic_like">Icon like</string>
+    <string name="description_ic_comment">Icon comment</string>
+    <string name="description_ic_save">Icon save</string>
 </resources>

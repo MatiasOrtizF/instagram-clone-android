@@ -1,12 +1,14 @@
 package com.mfo.instagramclone.data.network
 
 import com.mfo.instagramclone.data.network.response.LoginResponse
+import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
 import com.mfo.instagramclone.domain.models.LoginRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface InstagramCloneApiService {
 
@@ -17,4 +19,8 @@ interface InstagramCloneApiService {
     // user
     @GET("user")
     suspend fun getUserInfo(@Header ("Authorization") authorization: String): UserResponse
+
+    // post
+    @GET("post/{id}")
+    suspend fun getPost(@Path ("id") postId: Long): PostResponse
 }

@@ -9,7 +9,8 @@ data class PostResponse (
     @SerializedName ("content") val content: String,
     @SerializedName ("likes") val likes: Int,
     @SerializedName ("comments") val comments: Int,
-    @SerializedName ("createdAt") val createdAt: LocalDate
+    @SerializedName ("createdAt") val createdAt: String,
+    @SerializedName ("user") val user: PostUser
 ) {
     fun toDomain(): PostResponse {
         return PostResponse(
@@ -18,7 +19,15 @@ data class PostResponse (
             content = content,
             likes = likes,
             comments = comments,
-            createdAt = createdAt
+            createdAt = createdAt,
+            user = user
         )
     }
+
+    data class PostUser (
+        val id: Long,
+        val image: String?,
+        val userName: String,
+        val verified: Boolean
+    )
 }
