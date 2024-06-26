@@ -18,6 +18,9 @@
     <string name="search">Search</string>
     <string name="profile">Profile</string>
 
+    <!-- Search -->
+    <string name="hint_search">Search</string>
+
     <!-- Profile -->
     <string name="tv_posts">Posts</string>
     <string name="tv_followers">Followers</string>

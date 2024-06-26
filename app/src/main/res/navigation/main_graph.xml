@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_searchFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchDetailFragment"
+            app:destination="@id/searchDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -30,23 +33,28 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_postDetailActivity"
-            app:destination="@id/postDetailActivity" />
+            app:destination="@id/postDetailFragment" />
         <action
             android:id="@+id/action_profileFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
     </fragment>
-    <activity
-        android:id="@+id/postDetailActivity"
-        android:name="com.mfo.instagramclone.ui.postDetail.PostDetailActivity"
-        android:label="activity_post_detail"
-        tools:layout="@layout/activity_post_detail" >
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.mfo.instagramclone.ui.postDetail.PostDetailFragment"
+        android:label="post"
+        tools:layout="@layout/fragment_post_detail" >
         <argument
             android:name="postId"
             app:argType="long" />
-    </activity>
+    </fragment>
     <activity
         android:id="@+id/loginActivity"
         android:name="com.mfo.instagramclone.ui.login.LoginActivity"
         android:label="activity_login"
         tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/searchDetailFragment"
+        android:name="com.mfo.instagramclone.ui.search.SearchDetailFragment"
+        android:label="fragment_search_detail"
+        tools:layout="@layout/fragment_search_detail" />
 </navigation>

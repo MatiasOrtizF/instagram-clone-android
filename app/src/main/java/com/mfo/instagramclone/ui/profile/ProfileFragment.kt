@@ -86,7 +86,7 @@ class ProfileFragment : Fragment() {
         binding.apply {
             pbProfile.isVisible = true
             clProfileInfo.isVisible = false
-            btnEditProfile.isVisible = false
+            llButtons.isVisible = false
             rvProfile.isVisible = false
         }
     }
@@ -102,7 +102,7 @@ class ProfileFragment : Fragment() {
         binding.apply {
             pbProfile.isVisible = false
             clProfileInfo.isVisible = true
-            btnEditProfile.isVisible = true
+            llButtons.isVisible = true
             rvProfile.isVisible = true
         }
         val context = binding.root.context
