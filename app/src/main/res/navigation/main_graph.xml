@@ -56,5 +56,9 @@
         android:id="@+id/searchDetailFragment"
         android:name="com.mfo.instagramclone.ui.search.SearchDetailFragment"
         android:label="fragment_search_detail"
-        tools:layout="@layout/fragment_search_detail" />
+        tools:layout="@layout/fragment_search_detail" >
+        <action
+            android:id="@+id/action_searchDetailFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
 </navigation>

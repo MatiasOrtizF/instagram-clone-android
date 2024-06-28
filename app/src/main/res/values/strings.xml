@@ -2,7 +2,8 @@
     <string name="app_name">InstagramClone</string>
 
     <!-- descriptions -->
-    <string name="ic_user">Icon user</string>
+    <string name="iv_image_profile">image profile</string>
+    <string name="ic_cross">Icon cross</string>
 
     <!-- login -->
     <string name="description_ic_instagram">Icon Instagram</string>

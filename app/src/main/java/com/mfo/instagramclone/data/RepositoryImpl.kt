@@ -5,6 +5,7 @@ import com.mfo.instagramclone.data.network.InstagramCloneApiService
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
+import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.Repository
 import com.mfo.instagramclone.domain.models.LoginRequest
 import retrofit2.HttpException
@@ -30,6 +31,25 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
     override suspend fun getUserInfo(token: String): UserResponse? {
         runCatching { apiService.getUserInfo(token)}
             .onSuccess { return it.toDomain() }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getUserByUserName(token: String, word: String): List<UserSearchResponse>? {
+        runCatching {
+            val appointments = apiService.getUserByUserName(token, word)
+            appointments.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { appointments -> return appointments }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()

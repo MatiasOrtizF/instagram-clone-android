@@ -101,6 +101,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.profileFragment -> {
                     supportActionBar?.hide()
                 }
+                /*R.id.searchDetailFragment -> {
+                    supportActionBar?.hide()
+                }*/
                 else -> {
                     supportActionBar?.show()
                 }
