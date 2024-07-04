@@ -18,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mfo.instagramclone.databinding.FragmentPostDetailBinding
+import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
 import com.mfo.instagramclone.utils.PreferencesHelper
 import com.mfo.instagramclone.utils.PreferencesHelper.set
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +65,7 @@ class PostDetailFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnComment.setOnClickListener {
-            println("open comments")
+            PostDetailFragmentDirections.actionPostDetailFragmentToCommentListDialogFragment(args.postId)
         }
     }
 

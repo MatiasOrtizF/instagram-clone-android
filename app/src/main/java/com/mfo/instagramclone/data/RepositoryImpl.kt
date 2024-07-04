@@ -2,6 +2,7 @@ package com.mfo.instagramclone.data
 
 import android.util.Log
 import com.mfo.instagramclone.data.network.InstagramCloneApiService
+import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
@@ -65,6 +66,26 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
     override suspend fun getPost(postId: Long): PostResponse? {
         runCatching { apiService.getPost(postId) }
             .onSuccess { return it.toDomain() }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    // comment
+    override suspend fun getComments(token: String, postId: Long): List<CommentResponse>? {
+        runCatching {
+            val comments = apiService.getComments(token, postId)
+            comments.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { comments -> return comments }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()

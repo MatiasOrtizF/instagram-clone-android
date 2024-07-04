@@ -1,5 +1,6 @@
 package com.mfo.instagramclone.domain
 
+import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
@@ -17,4 +18,7 @@ interface Repository {
 
     // post
     suspend fun getPost(postId: Long): PostResponse?
+
+    // comment
+    suspend fun getComments(token: String, postId: Long): List<CommentResponse>?
 }

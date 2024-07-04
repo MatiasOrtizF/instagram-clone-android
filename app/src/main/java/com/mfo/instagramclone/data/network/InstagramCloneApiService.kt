@@ -1,5 +1,6 @@
 package com.mfo.instagramclone.data.network
 
+import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
@@ -31,4 +32,11 @@ interface InstagramCloneApiService {
     // post
     @GET("post/{id}")
     suspend fun getPost(@Path ("id") postId: Long): PostResponse
+
+    // comment
+    @GET("comment/{postId}")
+    suspend fun getComments(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long,
+    ): List<CommentResponse>
 }
