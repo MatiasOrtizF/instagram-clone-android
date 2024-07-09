@@ -46,9 +46,6 @@
         <argument
             android:name="postId"
             app:argType="long" />
-        <action
-            android:id="@+id/action_postDetailFragment_to_commentListDialogFragment"
-            app:destination="@id/commentListDialogFragment" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
@@ -64,13 +61,4 @@
             android:id="@+id/action_searchDetailFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
     </fragment>
-    <dialog
-        android:id="@+id/commentListDialogFragment"
-        android:name="com.mfo.instagramclone.ui.comment.CommentListDialogFragment"
-        android:label="comments"
-        tools:layout="@layout/fragment_comment_list_dialog_list_dialog" >
-        <argument
-            android:name="postId"
-            app:argType="long" />
-    </dialog>
 </navigation>

@@ -38,4 +38,8 @@
     <string name="description_ic_like">Icon like</string>
     <string name="description_ic_comment">Icon comment</string>
     <string name="description_ic_save">Icon save</string>
+
+    <!-- Comment -->
+    <string name="tv_comment">comments</string>
+
 </resources>

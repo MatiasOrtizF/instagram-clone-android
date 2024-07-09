@@ -24,15 +24,24 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentCommentListDialogListDialogBinding? = null
     private val binding get() = _binding!!
 
-    private val args: CommentListDialogFragmentArgs by navArgs()
-
     private val commentViewModel: CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
+
+    companion object {
+        fun newInstance(postId: Long): CommentListDialogFragment {
+            val fragment = CommentListDialogFragment()
+            val args = Bundle()
+            args.putLong("postId", postId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val token: String = getToken()
-        commentViewModel.getComments(token, args.postId)
+        val postId = requireArguments().getLong("postId")
+        commentViewModel.getComments(token, postId)
         initUI()
     }
 
