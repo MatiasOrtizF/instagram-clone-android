@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentPostDetailBinding
 import com.mfo.instagramclone.ui.comment.CommentListDialogFragment
 import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
@@ -37,7 +38,7 @@ class PostDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
-        postDetailViewModel.getPost(args.postId)
+        postDetailViewModel.getPost(getToken(), args.postId)
     }
 
     private fun initUI() {
@@ -65,10 +66,19 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.btnComment.setOnClickListener {
-            println("open comment")
-            val dialog = CommentListDialogFragment.newInstance(args.postId)
-            dialog.show(parentFragmentManager, "CommentListDialogFragment")
+        binding.apply {
+            btnLike.setOnClickListener {
+
+            }
+            btnComment.setOnClickListener {
+                openComments()
+            }
+            btnSave.setOnClickListener {
+                println("save post")
+            }
+            tvComments.setOnClickListener {
+                openComments()
+            }
         }
     }
 
@@ -94,25 +104,29 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun successState(state: PostDetailState.Success) {
-        println(state.post)
         binding.apply {
-            val context = tvComments.context
             pbPostDetail.isVisible = false
             clPostDetail.isVisible = true
             if(state.post.user.image != null) {
-                Glide.with(context).load(state.post.user.image).into(ivPost)
+                Glide.with(requireContext()).load(state.post.user.image).into(ivPost)
+            }
+            if(state.post.liked != null && state.post.liked == true) {
+                btnLike.setImageResource(R.drawable.ic_liked)
+            }
+            if(state.post.saved != null && state.post.saved == true) {
+                btnSave.setImageResource(R.drawable.ic_saved)
             }
             tvUserName.text = state.post.user.userName
             if(state.post.user.verified) {
                 ivVerified.isVisible = true
             }
-            Glide.with(context).load(state.post.image).into(ivPost)
+            Glide.with(requireContext()).load(state.post.image).into(ivPost)
             tvLike.text = state.post.likes.toString() + " likes"
             tvDescription.text = state.post.user.userName
             updateTextWithBoldPrefix(tvDescription, state.post.content)
 
-            tvComments.text = "View all ${state.post.comments.toString()} comments"
-            tvDate.text = state.post.createdAt.toString()
+            tvComments.text = "View all ${state.post.comments} comments"
+            tvDate.text = state.post.createdAt
         }
     }
 
@@ -135,9 +149,24 @@ class PostDetailFragment : Fragment() {
 
     }
 
+    private fun openComments() {
+        val dialog = CommentListDialogFragment.newInstance(args.postId)
+        dialog.show(parentFragmentManager, "CommentListDialogFragment")
+    }
+
+    private fun postLikeOrDeleteLike() {
+
+    }
+
     private fun clearSessionPreferences() {
         val context = binding.root.context
         val preferences = PreferencesHelper.defaultPrefs(context)
         preferences["jwt"] = ""
+    }
+
+    private fun getToken(): String {
+        val context = binding.root.context
+        val preferences = PreferencesHelper.defaultPrefs(context)
+        return preferences.getString("jwt", "").toString()
     }
 }

@@ -124,7 +124,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvLike"/>
 
             <Button
-                android:text="View all 1000 comments"
                 android:id="@+id/tvComments"
                 android:layout_width="wrap_content"
                 android:layout_height="34dp"

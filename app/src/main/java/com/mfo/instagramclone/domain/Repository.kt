@@ -21,4 +21,10 @@ interface Repository {
 
     // comment
     suspend fun getComments(token: String, postId: Long): List<CommentResponse>?
+
+    // like
+    suspend fun getLikedPost(token: String, postId: Long): Boolean?
+
+    // save
+    suspend fun getSavedPost(token: String, postId: Long): Boolean?
 }

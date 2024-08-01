@@ -39,4 +39,18 @@ interface InstagramCloneApiService {
         @Header ("Authorization") authorization: String,
         @Path ("postId") postId: Long,
     ): List<CommentResponse>
+
+    // like
+    @GET("like/user/{postId}")
+    suspend fun getLikedPost(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Boolean
+
+    // save
+    @GET("save/{postId}")
+    suspend fun getSavedPost(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Boolean
 }

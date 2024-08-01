@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 val email = binding.etEmail.text.toString()
                 val password = binding.etPassword.text.toString()
-                if(email.isNotEmpty() && password.isNotEmpty()) {
+                if(email.trim().isNotEmpty() && password.trim().isNotEmpty()) {
                     val loginRequest = LoginRequest(email, password)
 
                     loginViewModel.authenticationUser(loginRequest)

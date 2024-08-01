@@ -12,15 +12,18 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class PostDetailViewModel @Inject constructor(private val getPostUseCase: GetPostUseCase): ViewModel(){
+class PostDetailViewModel @Inject constructor(
+    private val getPostUseCase: GetPostUseCase
+): ViewModel(){
+
     private var _state = MutableStateFlow<PostDetailState>(PostDetailState.Loading)
     val state: StateFlow<PostDetailState> = _state
 
-    fun getPost(postId: Long) {
+    fun getPost(token: String, postId: Long) {
         viewModelScope.launch {
             _state.value = PostDetailState.Loading
             try {
-                val result = withContext(Dispatchers.IO) { getPostUseCase(postId) }
+                val result = withContext(Dispatchers.IO) { getPostUseCase(token, postId) }
                 if(result != null) {
                     _state.value = PostDetailState.Success(result)
                 } else {
