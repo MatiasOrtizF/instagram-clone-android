@@ -46,6 +46,9 @@
         <argument
             android:name="postId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"

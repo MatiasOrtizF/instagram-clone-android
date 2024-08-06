@@ -112,8 +112,35 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
+    override suspend fun addLike(token: String, postId: Long): Map<String, Boolean>? {
+        runCatching { apiService.addLike(token, postId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun deleteLike(token: String, postId: Long): Map<String, Boolean>? {
+        runCatching { apiService.deleteLike(token, postId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
     // save
-    // like
     override suspend fun getSavedPost(token: String, postId: Long): Boolean? {
         runCatching { apiService.getSavedPost(token, postId) }
             .onSuccess { return it }

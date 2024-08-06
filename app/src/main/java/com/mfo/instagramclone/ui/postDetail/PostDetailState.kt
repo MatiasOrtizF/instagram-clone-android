@@ -7,4 +7,5 @@ sealed class PostDetailState {
     data object Loading: PostDetailState()
     data class Error(val error: String): PostDetailState()
     data class Success(val post: PostResponse): PostDetailState()
+    data class LikeSuccess(val success: Map<String, Boolean>?): PostDetailState()
 }

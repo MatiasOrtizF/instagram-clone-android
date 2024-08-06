@@ -7,6 +7,7 @@ import com.mfo.instagramclone.data.network.response.UserResponse
 import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.models.LoginRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -46,6 +47,18 @@ interface InstagramCloneApiService {
         @Header ("Authorization") authorization: String,
         @Path ("postId") postId: Long
     ): Boolean
+
+    @POST("like/{postId}")
+    suspend fun addLike(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Map<String, Boolean>
+
+    @DELETE("like/{postId}")
+    suspend fun deleteLike(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Map<String, Boolean>
 
     // save
     @GET("save/{postId}")

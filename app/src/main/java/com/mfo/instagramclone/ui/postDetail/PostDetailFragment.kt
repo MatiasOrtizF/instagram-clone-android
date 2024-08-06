@@ -10,17 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentPostDetailBinding
 import com.mfo.instagramclone.ui.comment.CommentListDialogFragment
-import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
+import com.mfo.instagramclone.ui.search.SearchFragmentDirections
 import com.mfo.instagramclone.utils.PreferencesHelper
 import com.mfo.instagramclone.utils.PreferencesHelper.set
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +36,9 @@ class PostDetailFragment : Fragment() {
     private val postDetailViewModel: PostDetailViewModel by viewModels()
 
     private val args: PostDetailFragmentArgs by navArgs()
+
+    private var likedPost: Boolean = false
+    private var savedPost: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +64,7 @@ class PostDetailFragment : Fragment() {
                         PostDetailState.Loading -> loadingState()
                         is PostDetailState.Error -> errorState(it.error)
                         is PostDetailState.Success -> successState(it)
+                        is PostDetailState.LikeSuccess -> likeSuccess(it)
                     }
                 }
             }
@@ -68,7 +74,7 @@ class PostDetailFragment : Fragment() {
     private fun initListeners() {
         binding.apply {
             btnLike.setOnClickListener {
-
+                postLikeOrDeleteLike()
             }
             btnComment.setOnClickListener {
                 openComments()
@@ -112,9 +118,11 @@ class PostDetailFragment : Fragment() {
             }
             if(state.post.liked != null && state.post.liked == true) {
                 btnLike.setImageResource(R.drawable.ic_liked)
+                likedPost = true
             }
             if(state.post.saved != null && state.post.saved == true) {
                 btnSave.setImageResource(R.drawable.ic_saved)
+                savedPost = true
             }
             tvUserName.text = state.post.user.userName
             if(state.post.user.verified) {
@@ -127,6 +135,37 @@ class PostDetailFragment : Fragment() {
 
             tvComments.text = "View all ${state.post.comments} comments"
             tvDate.text = state.post.createdAt
+        }
+    }
+
+    private fun likeSuccess(likeState: PostDetailState.LikeSuccess) {
+        val deletedLikeSuccess: Map<String, Boolean> = mapOf("deleted" to true)
+        val postLikeSuccess: Map<String, Boolean> = mapOf("liked" to true)
+
+        val likesString = binding.tvLike.text.toString()
+        val currentLikes = likesString.filter { it.isDigit() }.toIntOrNull()
+        when (likeState.success) {
+            deletedLikeSuccess -> {
+                binding.btnLike.setImageResource(R.drawable.ic_like)
+                likedPost = false
+
+                if(currentLikes  != null) {
+                    val newNumberLikesPost = currentLikes - 1
+                    binding.tvLike.text = "$newNumberLikesPost likes"
+                }
+            }
+            postLikeSuccess -> {
+                binding.btnLike.setImageResource(R.drawable.ic_liked)
+                likedPost = true
+
+                if(currentLikes != null) {
+                    val newNumberLikesPost = currentLikes + 1
+                    binding.tvLike.text = "$newNumberLikesPost likes"
+                }
+            }
+            else -> {
+                Toast.makeText(requireContext(), "Failed to like post", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -146,7 +185,9 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun goToLogin() {
-
+        findNavController().navigate(
+            PostDetailFragmentDirections.actionPostDetailFragmentToLoginActivity()
+        )
     }
 
     private fun openComments() {
@@ -155,7 +196,12 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun postLikeOrDeleteLike() {
-
+        val token = getToken()
+        if(likedPost) {
+            postDetailViewModel.deleteLike(token, args.postId)
+        } else {
+            postDetailViewModel.addLike(token, args.postId)
+        }
     }
 
     private fun clearSessionPreferences() {

@@ -7,7 +7,8 @@ data class UserSearchResponse (
     @SerializedName("imageProfile") val imageProfile: String?,
     @SerializedName("userName") val userName: String,
     @SerializedName("name") val name: String,
-    @SerializedName("lastName") val lastName: String
+    @SerializedName("lastName") val lastName: String,
+    @SerializedName("verified") val verified: Boolean
 ) {
 
     fun toDomain(): UserSearchResponse {
@@ -16,7 +17,8 @@ data class UserSearchResponse (
             imageProfile = imageProfile,
             userName = userName,
             name = name,
-            lastName = lastName
+            lastName = lastName,
+            verified = verified
         )
     }
 }

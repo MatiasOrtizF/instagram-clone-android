@@ -24,6 +24,8 @@ interface Repository {
 
     // like
     suspend fun getLikedPost(token: String, postId: Long): Boolean?
+    suspend fun addLike(token: String, postId: Long): Map<String, Boolean>?
+    suspend fun deleteLike(token: String, postId: Long): Map<String, Boolean>?
 
     // save
     suspend fun getSavedPost(token: String, postId: Long): Boolean?
