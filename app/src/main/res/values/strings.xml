@@ -4,6 +4,8 @@
     <!-- descriptions -->
     <string name="iv_image_profile">image profile</string>
     <string name="ic_cross">Icon cross</string>
+    <string name="ib_like">Icon like</string>
+    <string name="iv_verified">Icon verified</string>
 
     <!-- login -->
     <string name="description_ic_instagram">Icon Instagram</string>
@@ -40,6 +42,10 @@
     <string name="description_ic_save">Icon save</string>
 
     <!-- Comment -->
-    <string name="tv_comment">comments</string>
+    <string name="tv_comment">Comments</string>
+    <string name="tv_no_comments">No comments yet</string>
+    <string name="tv_start_conversation">Start the conversation.</string>
+    <string name="hint_comment">Add a comment</string>
+    <string name="description_ib_send_comment">Icon send</string>
 
 </resources>

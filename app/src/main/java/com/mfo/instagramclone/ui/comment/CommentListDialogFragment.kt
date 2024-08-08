@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mfo.instagramclone.databinding.FragmentCommentListDialogListDialogBinding
 import com.mfo.instagramclone.ui.comment.adapter.CommentAdapter
@@ -82,25 +82,25 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun loadingState() {
-        //binding.pb.isVisible = true
+        binding.pbComment.isVisible = true
     }
 
     private fun errorState(error: String) {
-        //binding.pb.isVisible = false
+        binding.pbComment.isVisible = false
         val context = binding.root.context
         Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
     }
 
     private fun successSate(state: CommentState.Success) {
-        //binding.pb.isVisible = false
-        /*if(state.products.isEmpty()) {
-            binding.layoutFavEmpty.isVisible = true
+        binding.pbComment.isVisible = false
+        if(state.comments.isEmpty()) {
+            binding.llEmptyComments.isVisible = true
+            binding.rvComment.isVisible = false
         } else {
-            binding.layoutFavEmpty.isVisible = false
-            favoriteAdapter.updateList(state.products)
-        }*/
-
-        commentAdapter.updateList(state.comments)
+            commentAdapter.updateList(state.comments)
+            binding.llEmptyComments.isVisible = false
+            binding.rvComment.isVisible = true
+        }
     }
 
 
