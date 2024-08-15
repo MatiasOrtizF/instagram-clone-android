@@ -43,8 +43,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun clearSessionPreferences() {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
+        val preferences = PreferencesHelper.defaultPrefs(requireContext())
         preferences["jwt"] = ""
     }
 }

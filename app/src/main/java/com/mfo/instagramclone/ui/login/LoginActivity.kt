@@ -1,22 +1,25 @@
 package com.mfo.instagramclone.ui.login
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.ActivityLoginBinding
 import com.mfo.instagramclone.domain.models.LoginRequest
 import com.mfo.instagramclone.ui.main.MainActivity
 import com.mfo.instagramclone.utils.PreferencesHelper
 import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -62,29 +65,35 @@ class LoginActivity : AppCompatActivity() {
                     val loginRequest = LoginRequest(email, password)
 
                     loginViewModel.authenticationUser(loginRequest)
+                    hideKeyboard()
                     loadingState()
                 }
             }
             btnCreateAccount.setOnClickListener {
-                hideKeyBoard(it)
                 goToSignup()
             }
         }
     }
 
     private fun loadingState() {
-        binding.pbLogin.isVisible = true
-        binding.icInstagram.isVisible = false
-        binding.llEditText.isVisible = false
-        binding.btnCreateAccount.isVisible = false
+        binding.apply {
+            btnLogin.text = ""
+            btnLogin.isEnabled = false
+            pbLogin.isVisible = true
+        }
     }
 
     private fun errorState(error: String) {
-        binding.pbLogin.isVisible = false
-        binding.icInstagram.isVisible = true
-        binding.llEditText.isVisible = true
-        binding.btnCreateAccount.isVisible = true
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        AlertDialog.Builder(this)
+            .setTitle("Incorrect Credentials")
+            .setMessage(error)
+            .setPositiveButton("ok", null)
+            .show()
+        binding.apply {
+            pbLogin.isVisible = false
+            btnLogin.text = getString(R.string.btn_login)
+            btnLogin.isEnabled = true
+        }
     }
 
     private fun successState(state: LoginState.Success) {
@@ -107,11 +116,5 @@ class LoginActivity : AppCompatActivity() {
         /*val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
         finish()*/
-    }
-
-    // esto no funciona
-    private fun hideKeyBoard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

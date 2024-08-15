@@ -39,52 +39,54 @@
             android:textColorHint="@color/gray"
             android:background="@drawable/bg_et_login"
             android:layout_marginBottom="7dp"
-            android:autofillHints="emailAddress" />
+            android:autofillHints="emailAddress"/>
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:inputType="textPassword"
+            app:passwordToggleEnabled="true"
             android:hint="@string/hint_password"
             android:textColor="@color/white"
             android:paddingHorizontal="12dp"
             android:textColorHint="@color/gray"
             android:background="@drawable/bg_et_login"
             android:layout_marginBottom="7dp"
-            android:autofillHints="password"
-            />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_login"
-            android:background="@drawable/bg_btn_login"
-            android:textColor="@color/white" />
+            android:autofillHints="password"/>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_login"
+        android:background="@drawable/bg_btn_login"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/llEditText" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_create_account"
+        android:textStyle="bold"
         android:background="@drawable/bg_btn_create_account"
-        android:textColor="@color/blue_light"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/pbLogin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:indeterminateTint="@color/white"
         android:indeterminateTintMode="src_in"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnLogin"
+        app:layout_constraintBottom_toBottomOf="@+id/btnLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
