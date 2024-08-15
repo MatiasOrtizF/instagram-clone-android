@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.etSearch.setOnClickListener {
+        binding.btnSearch.setOnClickListener {
             findNavController().navigate(
                 SearchFragmentDirections.actionSearchFragmentToSearchDetailFragment()
             )

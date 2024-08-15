@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="2dp"
                 app:layout_constraintStart_toEndOf="@+id/btnIvProfile"
                 app:layout_constraintTop_toTopOf="@id/btnIvProfile"
                 app:layout_constraintBottom_toBottomOf="@id/btnIvProfile"/>

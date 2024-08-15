@@ -13,8 +13,7 @@ interface Repository {
 
     // user
     suspend fun getUserInfo(token: String): UserResponse?
-
-    suspend fun getUserByUserName(token: String, word: String): List<UserSearchResponse>?
+    suspend fun getUser(token: String, userId: Long): UserResponse?
 
     // post
     suspend fun getPost(postId: Long): PostResponse?
@@ -29,4 +28,10 @@ interface Repository {
 
     // save
     suspend fun getSavedPost(token: String, postId: Long): Boolean?
+
+    // search
+    suspend fun getSearchUserByUserName(token: String, word: String): List<UserSearchResponse>?
+    suspend fun getUsersSearchedHistory(token: String): List<UserSearchResponse>?
+    suspend fun addUserSearchedInHistory(token: String, userId: Long): Map<String,Boolean>?
+    suspend fun deleteUserSearchedInHistory(token: String, id: Long): Map<String,Boolean>?
 }

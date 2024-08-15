@@ -7,14 +7,17 @@
     tools:context=".ui.search.SearchFragment"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etSearch"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:autofillHints="false"
         android:background="@drawable/bg_et_search"
-        android:hint="@string/hint_search"
+        android:text="@string/hint_search"
+        android:textAllCaps="false"
+        android:gravity="start|center_vertical"
+        android:textSize="18sp"
+        android:textColor="@color/gray"
         android:padding="10dp"
         android:layout_marginBottom="15dp"/>
 

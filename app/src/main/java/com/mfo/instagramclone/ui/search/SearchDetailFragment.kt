@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -12,12 +13,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentSearchDetailBinding
-import com.mfo.instagramclone.ui.postDetail.PostDetailState
-import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
-import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
 import com.mfo.instagramclone.ui.search.adapter.SearchAdapter
 import com.mfo.instagramclone.utils.PreferencesHelper
 import com.mfo.instagramclone.utils.PreferencesHelper.set
@@ -34,6 +32,7 @@ class SearchDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        searchViewModel.getUsersSearchedHistory(getToken())
         initUI()
     }
 
@@ -47,7 +46,7 @@ class SearchDetailFragment : Fragment() {
         searchAdapter = SearchAdapter(
             onItemSelected = {
                 findNavController().navigate(
-                    ProfileFragmentDirections.actionProfileFragmentToPostDetailActivity(it.id)
+                    SearchDetailFragmentDirections.actionSearchDetailFragmentToUserProfileFragment(it.id, it.userName)
                 )
             }
         )
@@ -74,8 +73,7 @@ class SearchDetailFragment : Fragment() {
     private fun initListeners() {
         val token = getToken()
         binding.etSearch.addTextChangedListener {
-            println(it.toString())
-            searchViewModel.getUserByUserName(token, it.toString())
+            searchViewModel.getUserSearchByUserName(token, it.toString())
         }
     }
 
@@ -106,7 +104,6 @@ class SearchDetailFragment : Fragment() {
             pbSearchDetail.isVisible = false
             rvUserSearch.isVisible = true
         }
-        println(state.user)
         searchAdapter.updateList(state.user)
     }
 

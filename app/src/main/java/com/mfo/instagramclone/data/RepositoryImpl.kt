@@ -43,14 +43,9 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
-    override suspend fun getUserByUserName(token: String, word: String): List<UserSearchResponse>? {
-        runCatching {
-            val appointments = apiService.getUserByUserName(token, word)
-            appointments.map {
-                it.toDomain()
-            }
-        }
-            .onSuccess { appointments -> return appointments }
+    override suspend fun getUser(token: String, userId: Long): UserResponse? {
+        runCatching { apiService.getUser(token, userId)}
+            .onSuccess { return it.toDomain() }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()
@@ -154,4 +149,72 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
             }
         return null
     }
+
+    // Search
+    override suspend fun getSearchUserByUserName(token: String, word: String): List<UserSearchResponse>? {
+        runCatching {
+            val appointments = apiService.getSearchUserByUserName(token, word)
+            appointments.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { appointments -> return appointments }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getUsersSearchedHistory(token: String): List<UserSearchResponse>? {
+        runCatching {
+            val appointments = apiService.getUsersSearchedHistory(token)
+            appointments.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { appointments -> return appointments }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun addUserSearchedInHistory(token: String, userId: Long): Map<String, Boolean>? {
+        runCatching { apiService.addUserSearchedInHistory(token, userId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun deleteUserSearchedInHistory(token: String, id: Long): Map<String, Boolean>? {
+        runCatching { apiService.deleteUserSearchedInHistory(token, id) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
 }

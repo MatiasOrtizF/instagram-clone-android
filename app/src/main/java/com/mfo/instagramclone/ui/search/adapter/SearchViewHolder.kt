@@ -17,6 +17,8 @@ class SearchViewHolder (view: View): RecyclerView.ViewHolder(view) {
         binding.tvUserName.text = user.userName
         binding.tvFullName.text = user.name + " " + user.lastName
 
+        binding.parent.setOnClickListener { onItemSelected(user) }
+
         //binding.ivProfile.setOnClickListener { onItemSelected(post) }
     }
 }

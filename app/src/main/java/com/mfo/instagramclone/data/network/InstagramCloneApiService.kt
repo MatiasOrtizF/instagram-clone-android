@@ -24,11 +24,11 @@ interface InstagramCloneApiService {
     @GET("user")
     suspend fun getUserInfo(@Header ("Authorization") authorization: String): UserResponse
 
-    @GET("user/search")
-    suspend fun getUserByUserName(
+    @GET("user/{userId}")
+    suspend fun getUser(
         @Header ("Authorization") authorization: String,
-        @Query ("word") word: String
-    ): List<UserSearchResponse>
+        @Path ("userId") userId: Long
+    ): UserResponse
 
     // post
     @GET("post/{id}")
@@ -66,4 +66,26 @@ interface InstagramCloneApiService {
         @Header ("Authorization") authorization: String,
         @Path ("postId") postId: Long
     ): Boolean
+
+    // search
+    @GET("user/search")
+    suspend fun getSearchUserByUserName(
+        @Header ("Authorization") authorization: String,
+        @Query ("word") word: String
+    ): List<UserSearchResponse>
+
+    @GET("history")
+    suspend fun getUsersSearchedHistory(@Header ("Authorization") authorization: String): List<UserSearchResponse>
+
+    @POST("history/{userId}")
+    suspend fun addUserSearchedInHistory(
+        @Header ("Authorization") authorization: String,
+        @Path ("userId") userId: Long
+    ): Map<String, Boolean>
+
+    @DELETE("history/{id}")
+    suspend fun deleteUserSearchedInHistory(
+        @Header ("Authorization") authorization: String,
+        @Path ("id") id: Long
+    ): Map<String, Boolean>
 }

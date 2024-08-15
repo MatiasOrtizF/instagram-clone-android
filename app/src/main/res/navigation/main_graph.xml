@@ -63,5 +63,20 @@
         <action
             android:id="@+id/action_searchDetailFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_searchDetailFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.mfo.instagramclone.ui.userProfile.UserProfileFragment"
+        android:label= "@string/label_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <argument
+            android:name="userId"
+            app:argType="long" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
     </fragment>
 </navigation>
