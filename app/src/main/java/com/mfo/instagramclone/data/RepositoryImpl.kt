@@ -5,6 +5,7 @@ import com.mfo.instagramclone.data.network.InstagramCloneApiService
 import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
+import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
 import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.Repository
@@ -151,14 +152,14 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
     }
 
     // Search
-    override suspend fun getSearchUserByUserName(token: String, word: String): List<UserSearchResponse>? {
+    override suspend fun getSearchUserByUserName(token: String, word: String): List<UserHistoryResponse>? {
         runCatching {
-            val appointments = apiService.getSearchUserByUserName(token, word)
-            appointments.map {
+            val histories = apiService.getSearchUserByUserName(token, word)
+            histories.map {
                 it.toDomain()
             }
         }
-            .onSuccess { appointments -> return appointments }
+            .onSuccess { histories -> return histories }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()
@@ -170,14 +171,14 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
-    override suspend fun getUsersSearchedHistory(token: String): List<UserSearchResponse>? {
+    override suspend fun getUsersSearchedHistory(token: String): List<UserHistoryResponse>? {
         runCatching {
-            val appointments = apiService.getUsersSearchedHistory(token)
-            appointments.map {
+            val histories = apiService.getUsersSearchedHistory(token)
+            histories.map {
                 it.toDomain()
             }
         }
-            .onSuccess { appointments -> return appointments }
+            .onSuccess { histories -> return histories }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()

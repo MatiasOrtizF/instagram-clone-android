@@ -12,7 +12,6 @@
         android:layout_height="55dp"
         android:src="@drawable/ic_user"
         android:background="@drawable/bg_image_profile"
-        android:scaleType="centerCrop"
         android:contentDescription="@string/iv_image_profile"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -27,20 +26,22 @@
         app:layout_constraintStart_toEndOf="@+id/ivProfile">
 
         <TextView
-            android:text=""
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/tvFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textColor="@color/gray"/>
 
     </LinearLayout>
 
     <ImageButton
+        android:id="@+id/btnDeleteHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_cross"

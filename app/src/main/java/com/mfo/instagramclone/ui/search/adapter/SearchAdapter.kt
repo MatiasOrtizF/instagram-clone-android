@@ -4,14 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mfo.instagramclone.R
+import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserSearchResponse
 
-class SearchAdapter(private var userList: List<UserSearchResponse> = emptyList(), private val onItemSelected: (UserSearchResponse) -> Unit): RecyclerView.Adapter<SearchViewHolder>()  {
-    fun updateList(list: List<UserSearchResponse>) {
+class SearchAdapter(private var userList: MutableList<UserHistoryResponse> = mutableListOf(), private val onItemSelected: (UserHistoryResponse) -> Unit, private val onHistoryDeleteButtonClicked: (Long, Int) -> Unit): RecyclerView.Adapter<SearchViewHolder>() {
+    fun updateList(list: MutableList<UserHistoryResponse>) {
         userList = list
         notifyDataSetChanged()
     }
 
+    fun onDeleteItem(position: Int) {
+        userList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         return SearchViewHolder(
@@ -24,6 +29,6 @@ class SearchAdapter(private var userList: List<UserSearchResponse> = emptyList()
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        holder.bind(userList[position], onItemSelected)
+        holder.bind(userList[position], onItemSelected, onHistoryDeleteButtonClicked)
     }
 }

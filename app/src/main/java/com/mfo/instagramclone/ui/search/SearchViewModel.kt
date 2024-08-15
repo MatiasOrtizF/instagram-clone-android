@@ -31,7 +31,7 @@ class SearchViewModel @Inject constructor(
             try {
                 val result = withContext(Dispatchers.IO) { getUsersSearchedHistoryUseCase(token) }
                 if(result != null) {
-                    _state.value = SearchState.Success(result)
+                    _state.value = SearchState.Success(result.toMutableList())
                 } else {
                     _state.value = SearchState.Error("Error Occurred, please try again later. ")
                 }
@@ -48,7 +48,7 @@ class SearchViewModel @Inject constructor(
             try {
                 val result = withContext(Dispatchers.IO) { getUserSearchByUserNameUseCase(token, word) }
                 if(result != null) {
-                    _state.value = SearchState.Success(result)
+                    _state.value = SearchState.Success(result.toMutableList())
                 } else {
                     _state.value = SearchState.Error("Error Occurred, please try again later. ")
                 }
@@ -60,6 +60,36 @@ class SearchViewModel @Inject constructor(
     }
 
     fun addUserSearchedInHistory(token: String, userId: Long) {
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { postUserSearchedInHistoryUseCase(token, userId) }
+                if(result != null) {
+                    _state.value = SearchState.HistorySuccess(result)
+                } else {
+                    _state.value = SearchState.Error("Error Occurred, please try again later.")
+                }
+            } catch (e: Exception) {
+                val errorMessage: String = e.message.toString()
+                _state.value = SearchState.Error(errorMessage)
+            }
+        }
+    }
 
+    suspend fun deleteUserSearchedInHistory(token: String, id: Long): Map<String, Boolean> {
+        _state.value = SearchState.Loading
+        return try {
+            val result = withContext(Dispatchers.IO) { deleteUserSearchedInHistoryUseCase(token, id) }
+            if (result!=null) {
+                _state.value = SearchState.HistorySuccess(result)
+                result
+            } else {
+                _state.value = SearchState.Error("Error occurred, please try again later.")
+                mapOf("deleted" to false)
+            }
+        } catch (e: Exception) {
+            val errorMessage: String = e.message.toString()
+            _state.value = SearchState.Error(errorMessage)
+            mapOf("deleted" to false)
+        }
     }
 }

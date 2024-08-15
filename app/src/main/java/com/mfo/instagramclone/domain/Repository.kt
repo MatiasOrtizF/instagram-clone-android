@@ -3,6 +3,7 @@ package com.mfo.instagramclone.domain
 import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
+import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
 import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.models.LoginRequest
@@ -30,8 +31,8 @@ interface Repository {
     suspend fun getSavedPost(token: String, postId: Long): Boolean?
 
     // search
-    suspend fun getSearchUserByUserName(token: String, word: String): List<UserSearchResponse>?
-    suspend fun getUsersSearchedHistory(token: String): List<UserSearchResponse>?
+    suspend fun getSearchUserByUserName(token: String, word: String): List<UserHistoryResponse>?
+    suspend fun getUsersSearchedHistory(token: String): List<UserHistoryResponse>?
     suspend fun addUserSearchedInHistory(token: String, userId: Long): Map<String,Boolean>?
     suspend fun deleteUserSearchedInHistory(token: String, id: Long): Map<String,Boolean>?
 }

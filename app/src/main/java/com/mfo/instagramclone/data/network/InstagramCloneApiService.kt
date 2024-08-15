@@ -3,6 +3,7 @@ package com.mfo.instagramclone.data.network
 import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
+import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
 import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.models.LoginRequest
@@ -72,10 +73,10 @@ interface InstagramCloneApiService {
     suspend fun getSearchUserByUserName(
         @Header ("Authorization") authorization: String,
         @Query ("word") word: String
-    ): List<UserSearchResponse>
+    ): List<UserHistoryResponse>
 
     @GET("history")
-    suspend fun getUsersSearchedHistory(@Header ("Authorization") authorization: String): List<UserSearchResponse>
+    suspend fun getUsersSearchedHistory(@Header ("Authorization") authorization: String): List<UserHistoryResponse>
 
     @POST("history/{userId}")
     suspend fun addUserSearchedInHistory(

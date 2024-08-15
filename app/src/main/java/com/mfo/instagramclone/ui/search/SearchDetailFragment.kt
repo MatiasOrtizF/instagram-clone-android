@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -14,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentSearchDetailBinding
 import com.mfo.instagramclone.ui.search.adapter.SearchAdapter
 import com.mfo.instagramclone.utils.PreferencesHelper
@@ -26,6 +24,7 @@ import kotlinx.coroutines.launch
 class SearchDetailFragment : Fragment() {
     private var _binding: FragmentSearchDetailBinding? = null
     private val binding get() = _binding!!
+
     private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var searchAdapter: SearchAdapter
 
@@ -45,9 +44,14 @@ class SearchDetailFragment : Fragment() {
     private fun initList() {
         searchAdapter = SearchAdapter(
             onItemSelected = {
+                searchViewModel.addUserSearchedInHistory(getToken(), it.userId)
+                println(it)
                 findNavController().navigate(
-                    SearchDetailFragmentDirections.actionSearchDetailFragmentToUserProfileFragment(it.id, it.userName)
+                    SearchDetailFragmentDirections.actionSearchDetailFragmentToUserProfileFragment(it.userId, it.userName)
                 )
+            },
+            onHistoryDeleteButtonClicked = { id, position ->
+                deleteUserToHistory(id, position)
             }
         )
         binding.rvUserSearch.apply {
@@ -64,6 +68,7 @@ class SearchDetailFragment : Fragment() {
                         SearchState.Loading -> loadingState()
                         is SearchState.Error -> errorState(it.error)
                         is SearchState.Success -> successState(it)
+                        else -> Unit
                     }
                 }
             }
@@ -73,7 +78,13 @@ class SearchDetailFragment : Fragment() {
     private fun initListeners() {
         val token = getToken()
         binding.etSearch.addTextChangedListener {
-            searchViewModel.getUserSearchByUserName(token, it.toString())
+            if(it.toString().trim().isNotEmpty()) {
+                searchViewModel.getUserSearchByUserName(token, it.toString())
+                // borrar la cruz
+            } else {
+                searchViewModel.getUsersSearchedHistory(getToken())
+                // agregar la cruz
+            }
         }
     }
 
@@ -104,7 +115,7 @@ class SearchDetailFragment : Fragment() {
             pbSearchDetail.isVisible = false
             rvUserSearch.isVisible = true
         }
-        searchAdapter.updateList(state.user)
+        searchAdapter.updateList(state.users)
     }
 
     private fun getToken(): String {
@@ -123,5 +134,15 @@ class SearchDetailFragment : Fragment() {
         val context = binding.root.context
         val preferences = PreferencesHelper.defaultPrefs(context)
         preferences["jwt"] = ""
+    }
+
+    private fun deleteUserToHistory(id: Long, position: Int) {
+        val deletedHistorySuccess: Map<String, Boolean> = mapOf("deleted" to true)
+        lifecycleScope.launch {
+            val isDelete = searchViewModel.deleteUserSearchedInHistory(getToken(), id)
+            if (isDelete == deletedHistorySuccess) {
+                searchAdapter.onDeleteItem(position)
+            }
+        }
     }
 }
