@@ -1,10 +1,16 @@
 package com.mfo.instagramclone.ui.userProfile
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -70,6 +76,7 @@ class UserProfileFragment : Fragment() {
                         UserProfileState.Loading -> loadingState()
                         is UserProfileState.Error -> errorState(it.error)
                         is UserProfileState.Success -> successState(it)
+                        is UserProfileState.FollowSuccess -> followSuccess(it)
                     }
                 }
             }
@@ -77,7 +84,12 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
-
+        binding.apply {
+            btnAddFollow.setOnClickListener { userProfileViewModel.addFollower(getToken(), args.userId) }
+            btnDeleteFollow.setOnClickListener { userProfileViewModel.deleteFollower(getToken(), args.userId) }
+            btnFollowers.setOnClickListener { println("open all followers") }
+            btnFollowing.setOnClickListener { println("open all following") }
+        }
     }
 
     override fun onCreateView(
@@ -122,12 +134,57 @@ class UserProfileFragment : Fragment() {
         if(state.user.post.isEmpty()) {
             binding.tvNoPosts.isVisible = true
         }
-        binding.tvFullName.text = state.user.name + " " + state.user.lastName
-        binding.tvNumberPost.text = state.user.numberPost.toString()
-        binding.tvNumberFollowers.text = state.user.numberFollowers.toString()
-        binding.tvNumberFollowing.text = state.user.numberFollowing.toString()
+        binding.tvFullName.text = getString(R.string.full_name_format, state.user.name, state.user.lastName)
+        binding.btnPost.text =  updateTextWithBoldPrefix(R.string.btn_posts, state.user.numberPost)
+        binding.btnFollowers.text = updateTextWithBoldPrefix(R.string.btn_followers, state.user.numberFollowers)
+        binding.btnFollowing.text = updateTextWithBoldPrefix(R.string.btn_followings, state.user.numberFollowing)
         profileAdapter.updateList(state.user.post)
     }
+
+    private fun followSuccess(followState: UserProfileState.FollowSuccess) {
+        val deletedFollowerSuccess: Map<String, Boolean> = mapOf("unfollowed" to true)
+        val postFollowerSuccess: Map<String, Boolean> = mapOf("following" to true)
+
+        val followersString = binding.btnFollowers.text.toString()
+        val currentFollowers = followersString.filter { it.isDigit() }.toIntOrNull()
+        when (followState.success) {
+            deletedFollowerSuccess -> {
+                binding.btnAddFollow.isVisible = true
+                binding.btnDeleteFollow.isVisible = false
+
+                if(currentFollowers != null) {
+                    val newNumberFollowersUser: Long = (currentFollowers - 1).toLong()
+                    binding.btnFollowers.text = updateTextWithBoldPrefix(R.string.btn_followers, newNumberFollowersUser)
+                }
+            }
+            postFollowerSuccess -> {
+                binding.btnAddFollow.isVisible = false
+                binding.btnDeleteFollow.isVisible = true
+
+                if(currentFollowers != null) {
+                    val newNumberFollowersUser = (currentFollowers + 1).toLong()
+                    binding.btnFollowers.text = updateTextWithBoldPrefix(R.string.btn_followers, newNumberFollowersUser)
+                }
+            }
+            else -> {
+                Toast.makeText(requireContext(), "Failed to follow user", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateTextWithBoldPrefix(format: Int, number: Long): SpannableString {
+        val spannableString = SpannableString(getString(format, number))
+
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            number.toString().length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return spannableString
+    }
+
 
     private fun getToken(): String {
         val preferences = PreferencesHelper.defaultPrefs(requireContext())

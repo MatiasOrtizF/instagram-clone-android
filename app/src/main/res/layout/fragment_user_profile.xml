@@ -11,7 +11,6 @@
         android:id="@+id/clProfileInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -34,64 +33,38 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
 
-        <TextView
-            android:id="@+id/tvNumberPost"
+        <Button
+            android:id="@+id/btnPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvPost"
-            app:layout_constraintEnd_toEndOf="@id/tvPost"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/tvPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="@string/tv_posts"
-            app:layout_constraintTop_toBottomOf="@+id/tvNumberPost"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivProfile"/>
 
+            <!-- number bold -->
 
-        <TextView
-            android:id="@+id/tvNumberFollowers"
+        <Button
+            android:id="@+id/btnFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:paddingTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textSize="15sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tvFollowers"
-            app:layout_constraintStart_toStartOf="@+id/tvFollowers"/>
+            app:layout_constraintStart_toEndOf="@+id/btnPost"
+            app:layout_constraintEnd_toStartOf="@id/btnFollowing"/>
 
-        <TextView
-            android:id="@+id/tvFollowers"
+        <Button
+            android:id="@+id/btnFollowing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_followers"
-            app:layout_constraintTop_toBottomOf="@+id/tvNumberFollowing"
-            app:layout_constraintEnd_toStartOf="@+id/tvFollowings"
-            app:layout_constraintStart_toEndOf="@+id/tvPost"/>
-
-
-        <TextView
-            android:id="@+id/tvNumberFollowing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:paddingTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/tvFollowings"
-            app:layout_constraintStart_toStartOf="@+id/tvFollowings"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/tvFollowings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:text="@string/tv_followings"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvNumberFollowing" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,6 +72,7 @@
         android:id="@+id/llButtons"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/clProfileInfo"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
