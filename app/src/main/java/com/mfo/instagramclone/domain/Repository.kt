@@ -1,6 +1,7 @@
 package com.mfo.instagramclone.domain
 
 import com.mfo.instagramclone.data.network.response.CommentResponse
+import com.mfo.instagramclone.data.network.response.FollowResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
@@ -35,4 +36,11 @@ interface Repository {
     suspend fun getUsersSearchedHistory(token: String): List<UserHistoryResponse>?
     suspend fun addUserSearchedInHistory(token: String, userId: Long): Map<String,Boolean>?
     suspend fun deleteUserSearchedInHistory(token: String, id: Long): Map<String,Boolean>?
+
+    // Follower and Following
+    suspend fun getAllFollowers(token: String, userId: Long): List<FollowResponse>?
+    suspend fun addFollower(token: String, userId: Long): Map<String, Boolean>?
+    suspend fun deleteFollower(token: String, userId: Long): Map<String, Boolean>?
+    suspend fun getFollowedUser(token: String, userId: Long): Boolean?
+    suspend fun getAllFollowing(token: String, userId: Long): List<FollowResponse>?
 }

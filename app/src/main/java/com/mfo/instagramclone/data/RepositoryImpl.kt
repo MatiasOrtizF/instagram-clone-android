@@ -3,6 +3,7 @@ package com.mfo.instagramclone.data
 import android.util.Log
 import com.mfo.instagramclone.data.network.InstagramCloneApiService
 import com.mfo.instagramclone.data.network.response.CommentResponse
+import com.mfo.instagramclone.data.network.response.FollowResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
@@ -218,4 +219,84 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
+    // Follower and Following
+    override suspend fun getAllFollowers(token: String, userId: Long): List<FollowResponse>? {
+        runCatching {
+            val users = apiService.getAllFollowers(token, userId)
+            users.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { users -> return users }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun addFollower(token: String, userId: Long): Map<String, Boolean>? {
+        runCatching { apiService.addFollower(token, userId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun deleteFollower(token: String, userId: Long): Map<String, Boolean>? {
+        runCatching { apiService.deleteFollower(token, userId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getFollowedUser(token: String, userId: Long): Boolean? {
+        runCatching { apiService.getFollowedUser(token, userId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getAllFollowing(token: String, userId: Long): List<FollowResponse>? {
+        runCatching {
+            val users = apiService.getAllFollowing(token, userId)
+            users.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { users -> return users }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
 }

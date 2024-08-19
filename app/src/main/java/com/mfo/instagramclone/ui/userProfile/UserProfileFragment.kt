@@ -83,7 +83,7 @@ class UserProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUserProfileBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -111,9 +111,13 @@ class UserProfileFragment : Fragment() {
             llButtons.isVisible = true
             rvProfile.isVisible = true
         }
-        val context = binding.root.context
+        if(state.user.followed != null && state.user.followed == true) {
+            binding.btnAddFollow.isVisible = false
+        } else {
+            binding.btnDeleteFollow.isVisible = false
+        }
         if(state.user.imageProfile != null) {
-            Glide.with(context).load(state.user.imageProfile).into(binding.ivProfile)
+            Glide.with(requireContext()).load(state.user.imageProfile).into(binding.ivProfile)
         }
         if(state.user.post.isEmpty()) {
             binding.tvNoPosts.isVisible = true
@@ -126,8 +130,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getToken(): String {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
+        val preferences = PreferencesHelper.defaultPrefs(requireContext())
         return preferences.getString("jwt", "").toString()
     }
 
@@ -138,8 +141,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun clearSessionPreferences() {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
+        val preferences = PreferencesHelper.defaultPrefs(requireContext())
         preferences["jwt"] = ""
     }
 }

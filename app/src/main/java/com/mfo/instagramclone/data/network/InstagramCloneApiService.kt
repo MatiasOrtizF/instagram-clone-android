@@ -1,6 +1,7 @@
 package com.mfo.instagramclone.data.network
 
 import com.mfo.instagramclone.data.network.response.CommentResponse
+import com.mfo.instagramclone.data.network.response.FollowResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
@@ -89,4 +90,35 @@ interface InstagramCloneApiService {
         @Header ("Authorization") authorization: String,
         @Path ("id") id: Long
     ): Map<String, Boolean>
+
+    // follower / following
+    @GET("follower/{userId}")
+    suspend fun getAllFollowers(
+        @Header ("Authorization") authorization: String,
+        @Path ("userId") userId: Long
+    ): List<FollowResponse>
+
+    @POST("follower/{followingUserId}")
+    suspend fun addFollower(
+        @Header ("Authorization") authorization: String,
+        @Path ("followingUserId") userId: Long
+    ): Map<String, Boolean>
+
+    @DELETE("follower/{followingUserId}")
+    suspend fun deleteFollower(
+        @Header ("Authorization") authorization: String,
+        @Path ("followingUserId") userId: Long
+    ): Map<String, Boolean>
+
+    @GET("follower")
+    suspend fun getFollowedUser(
+        @Header ("Authorization") authorization: String,
+        @Query ("userId") userId: Long
+    ): Boolean
+
+    @GET("following/{userId}")
+    suspend fun getAllFollowing(
+        @Header ("Authorization") authorization: String,
+        @Path ("userId") userId: Long
+    ): List<FollowResponse>
 }
