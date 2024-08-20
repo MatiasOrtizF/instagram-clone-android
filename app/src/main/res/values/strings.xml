@@ -17,7 +17,6 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="btn_create_account">Create new account</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Bottom bar -->
@@ -29,16 +28,13 @@
     <string name="hint_search">Search</string>
 
     <!-- Profile -->
-    <string name="tv_posts">Posts</string>
-    <string name="tv_followers">Followers</string>
-    <string name="tv_followings">Followings</string>
-    <string name="btn_edit_profile">Edit profile</string>
-    <string name="btn_share_profile">Share profile</string>
     <string name="description_iv_post">Image post</string>
     <string name="btn_posts">%d\nPosts</string>
     <string name="btn_followers">%d\nFollowers</string>
     <string name="btn_followings">%d\nFollowings</string>
     <string name="full_name_format">%1$s %2$s</string>
+    <string name="btn_edit_profile">Edit profile</string>
+    <string name="btn_share_profile">Share profile</string>
     <string name="btn_follow">Follow</string>
     <string name="btn_following">Following</string>
     <string name="btn_message">Message</string>

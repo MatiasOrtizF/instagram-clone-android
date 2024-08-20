@@ -11,6 +11,7 @@
         android:id="@+id/clProfileInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -32,26 +33,19 @@
             app:layout_constraintTop_toBottomOf="@+id/ivProfile"
             app:layout_constraintStart_toStartOf="parent"/>
 
-
         <Button
             android:id="@+id/btnPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            style="@style/ButtonsProfileUser"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivProfile"/>
-
-            <!-- number bold -->
 
         <Button
             android:id="@+id/btnFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            style="@style/ButtonsProfileUser"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnPost"
             app:layout_constraintEnd_toStartOf="@id/btnFollowing"/>
@@ -60,9 +54,7 @@
             android:id="@+id/btnFollowing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            style="@style/ButtonsProfileUser"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

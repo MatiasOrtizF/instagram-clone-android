@@ -1,6 +1,10 @@
 package com.mfo.instagramclone.ui.profile
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentProfileBinding
 import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
 import com.mfo.instagramclone.utils.PreferencesHelper
@@ -104,21 +109,33 @@ class ProfileFragment : Fragment() {
             clProfileInfo.isVisible = true
             llButtons.isVisible = true
             rvProfile.isVisible = true
+
+            tvFullName.text = getString(R.string.full_name_format, state.user.name, state.user.lastName)
+            btnPost.text = updateTextWithBoldPrefix(R.string.btn_posts, state.user.numberPost)
+            btnFollowers.text = updateTextWithBoldPrefix(R.string.btn_followers, state.user.numberFollowers)
+            btnFollowing.text = updateTextWithBoldPrefix(R.string.btn_followings, state.user.numberFollowing)
         }
-        val context = binding.root.context
         if(state.user.imageProfile != null) {
-            Glide.with(context).load(state.user.imageProfile).into(binding.ivProfile)
+            Glide.with(requireContext()).load(state.user.imageProfile).into(binding.ivProfile)
         }
-        binding.tvFullName.text = state.user.name + " " + state.user.lastName
-        binding.tvNumberPost.text = state.user.numberPost.toString()
-        binding.tvNumberFollowers.text = state.user.numberFollowers.toString()
-        binding.tvNumberFollowing.text = state.user.numberFollowing.toString()
         profileAdapter.updateList(state.user.post)
     }
 
+    private fun updateTextWithBoldPrefix(format: Int, number: Long): SpannableString {
+        val spannableString = SpannableString(getString(format, number))
+
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            number.toString().length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return spannableString
+    }
+
     private fun getToken(): String {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
+        val preferences = PreferencesHelper.defaultPrefs(requireContext())
         return preferences.getString("jwt", "").toString()
     }
 
@@ -129,8 +146,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun clearSessionPreferences() {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
+        val preferences = PreferencesHelper.defaultPrefs(requireContext())
         preferences["jwt"] = ""
     }
 }
