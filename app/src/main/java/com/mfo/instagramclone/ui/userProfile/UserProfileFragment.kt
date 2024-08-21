@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
@@ -27,6 +26,8 @@ import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
 import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
 import com.mfo.instagramclone.utils.PreferencesHelper
 import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,7 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userProfileViewModel.getUser(getToken(), args.userId)
+        userProfileViewModel.getUser(requireContext().getToken(), args.userId)
         activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.userName
         initUI()
     }
@@ -84,11 +85,12 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
+        val token = requireContext().getToken()
         binding.apply {
-            btnAddFollow.setOnClickListener { userProfileViewModel.addFollower(getToken(), args.userId) }
-            btnDeleteFollow.setOnClickListener { userProfileViewModel.deleteFollower(getToken(), args.userId) }
-            btnFollowers.setOnClickListener { println("open all followers") }
-            btnFollowing.setOnClickListener { println("open all following") }
+            btnAddFollow.setOnClickListener { userProfileViewModel.addFollower(token, args.userId) }
+            btnDeleteFollow.setOnClickListener { userProfileViewModel.deleteFollower(token, args.userId) }
+            btnFollowers.setOnClickListener { handleGoToFollow("followers") }
+            btnFollowing.setOnClickListener { handleGoToFollow("following") }
         }
     }
 
@@ -111,8 +113,8 @@ class UserProfileFragment : Fragment() {
 
     private fun errorState(error: String) {
         if(error == "Unauthorized: invalid token") {
-            goToLogin()
-            clearSessionPreferences()
+            handleGoToLogin()
+            requireContext().clearSessionPreferences()
         }
     }
 
@@ -185,20 +187,13 @@ class UserProfileFragment : Fragment() {
         return spannableString
     }
 
-
-    private fun getToken(): String {
-        val preferences = PreferencesHelper.defaultPrefs(requireContext())
-        return preferences.getString("jwt", "").toString()
-    }
-
-    private fun goToLogin() {
+    private fun handleGoToLogin() {
         findNavController().navigate(
             ProfileFragmentDirections.actionProfileFragmentToLoginActivity()
         )
     }
 
-    private fun clearSessionPreferences() {
-        val preferences = PreferencesHelper.defaultPrefs(requireContext())
-        preferences["jwt"] = ""
+    private fun handleGoToFollow(label: String) {
+        findNavController().navigate(UserProfileFragmentDirections.actionUserProfileFragmentToFollowFragment(args.userId, label))
     }
 }

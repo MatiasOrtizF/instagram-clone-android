@@ -3,6 +3,7 @@ package com.mfo.instagramclone.data.network.response
 import com.google.gson.annotations.SerializedName
 
 data class UserResponse (
+    @SerializedName ("id") val id: Long,
     @SerializedName ("name") val name: String,
     @SerializedName ("lastName") val lastName: String,
     @SerializedName ("email") val email: String,
@@ -19,6 +20,7 @@ data class UserResponse (
 ) {
     fun toDomain(): UserResponse {
         return UserResponse(
+            id = id,
             name = name,
             lastName = lastName,
             email = email,

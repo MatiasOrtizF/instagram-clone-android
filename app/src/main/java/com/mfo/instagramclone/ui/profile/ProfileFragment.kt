@@ -20,8 +20,9 @@ import com.bumptech.glide.Glide
 import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentProfileBinding
 import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.ui.userProfile.UserProfileFragmentDirections
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,10 +34,11 @@ class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private lateinit var profileAdapter: ProfileAdapter
 
+    private var userId: Long = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val token: String = getToken()
+        val token = requireContext().getToken()
         profileViewModel.getUserInfo(token)
         initUI()
     }
@@ -76,7 +78,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initListeners() {
-
+        binding.apply {
+            btnFollowers.setOnClickListener { handleGoToFollow("followers") }
+            btnFollowing.setOnClickListener { handleGoToFollow("following") }
+        }
     }
 
     override fun onCreateView(
@@ -98,12 +103,13 @@ class ProfileFragment : Fragment() {
 
     private fun errorState(error: String) {
         if(error == "Unauthorized: invalid token") {
-            goToLogin()
-            clearSessionPreferences()
+            handleGoToLogin()
+            requireContext().clearSessionPreferences()
         }
     }
 
     private fun successState(state: ProfileState.Success) {
+        userId = state.user.id
         binding.apply {
             pbProfile.isVisible = false
             clProfileInfo.isVisible = true
@@ -134,19 +140,13 @@ class ProfileFragment : Fragment() {
         return spannableString
     }
 
-    private fun getToken(): String {
-        val preferences = PreferencesHelper.defaultPrefs(requireContext())
-        return preferences.getString("jwt", "").toString()
-    }
-
-    private fun goToLogin() {
+    private fun handleGoToLogin() {
         findNavController().navigate(
             ProfileFragmentDirections.actionProfileFragmentToLoginActivity()
         )
     }
 
-    private fun clearSessionPreferences() {
-        val preferences = PreferencesHelper.defaultPrefs(requireContext())
-        preferences["jwt"] = ""
+    private fun handleGoToFollow(label: String) {
+        findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToFollowFragment(userId, label))
     }
 }

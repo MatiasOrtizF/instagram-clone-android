@@ -9,7 +9,7 @@ data class FollowResponse (
     @SerializedName("name") val name: String,
     @SerializedName("lastName") val lastName: String,
     @SerializedName("verified") val verified: Boolean,
-    @SerializedName("followed") var followed: Boolean?
+    @SerializedName("followed") var followed: Boolean
 ){
 
     fun toDomain(): FollowResponse {

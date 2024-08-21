@@ -37,6 +37,12 @@
         <action
             android:id="@+id/action_profileFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_profileFragment_to_followFragment"
+            app:destination="@id/followFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_followFragment2"
+            app:destination="@id/followFragment" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
@@ -78,5 +84,26 @@
         <argument
             android:name="userName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_followFragment"
+            app:destination="@id/followFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followFragment"
+        android:name="com.mfo.instagramclone.ui.follow.FollowFragment"
+        android:label="fragment_follow"
+        tools:layout="@layout/fragment_follow" >
+        <argument
+            android:name="userId"
+            app:argType="long" />
+        <argument
+            android:name="label"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_followFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_followFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
 </navigation>
