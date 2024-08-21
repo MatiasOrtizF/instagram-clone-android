@@ -6,6 +6,7 @@ import com.mfo.instagramclone.domain.usecase.follow.DeleteFollowerUseCase
 import com.mfo.instagramclone.domain.usecase.follow.GetFollowersUseCase
 import com.mfo.instagramclone.domain.usecase.follow.GetFollowingsUseCase
 import com.mfo.instagramclone.domain.usecase.follow.PostFollowerUseCase
+import com.mfo.instagramclone.domain.usecase.like.GetAllUsersLikedPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FollowViewModel @Inject constructor(
+    private val getAllUsersLikedPostUseCase: GetAllUsersLikedPostUseCase,
     private val getFollowersUseCase: GetFollowersUseCase,
     private val getFollowingsUseCase: GetFollowingsUseCase,
     private val postFollowerUseCase: PostFollowerUseCase,
@@ -23,6 +25,23 @@ class FollowViewModel @Inject constructor(
 ): ViewModel() {
     private var _state = MutableStateFlow<FollowState>(FollowState.Loading)
     val state: StateFlow<FollowState> = _state
+
+    fun getUsersLikedPost(token: String, postId: Long) {
+        viewModelScope.launch {
+            _state.value = FollowState.Loading
+            try {
+                val result = withContext(Dispatchers.IO) { getAllUsersLikedPostUseCase(token, postId) }
+                if(result != null) {
+                    _state.value = FollowState.Success(result)
+                } else {
+                    _state.value = FollowState.Error("Error Occurred, please try again later. ")
+                }
+            } catch (e: Exception) {
+                val errorMessage: String = e.message.toString()
+                _state.value = FollowState.Error(errorMessage)
+            }
+        }
+    }
 
     fun getFollowers(token: String, userId: Long) {
         viewModelScope.launch {

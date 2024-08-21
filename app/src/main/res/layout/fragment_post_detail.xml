@@ -13,10 +13,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="gone"
             android:id="@+id/clPostDetail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                 android:id="@+id/ivVerified"
                 android:layout_width="20sp"
                 android:layout_height="20sp"
-                android:visibility="gone"
+
                 android:src="@drawable/ic_verified"
                 android:contentDescription="@string/description_ic_verified"
                 android:layout_marginStart="5dp"
@@ -116,22 +116,26 @@
                 android:paddingHorizontal="10dp"
                 android:paddingTop="5dp">
 
-                <TextView
-                    android:id="@+id/tvLike"
+                <Button
+                    android:id="@+id/btnLikes"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/black_light"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:padding="0dp"
+                    android:gravity="start|center_vertical" />
 
                 <TextView
                     android:id="@+id/tvDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    app:layout_constraintTop_toBottomOf="@id/tvLike"/>
+                    app:layout_constraintTop_toBottomOf="@id/btnLikes"/>
 
                 <Button
-                    android:id="@+id/tvComments"
+                    android:id="@+id/btnComments"
                     android:layout_width="wrap_content"
                     android:layout_height="34dp"
                     android:background="?attr/selectableItemBackground"

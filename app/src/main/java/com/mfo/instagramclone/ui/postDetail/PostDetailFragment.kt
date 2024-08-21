@@ -22,9 +22,8 @@ import com.bumptech.glide.Glide
 import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentPostDetailBinding
 import com.mfo.instagramclone.ui.comment.CommentListDialogFragment
-import com.mfo.instagramclone.ui.search.SearchFragmentDirections
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -43,7 +42,7 @@ class PostDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
-        postDetailViewModel.getPost(getToken(), args.postId)
+        postDetailViewModel.getPost(requireContext().getToken(), args.postId)
     }
 
     private fun initUI() {
@@ -73,18 +72,11 @@ class PostDetailFragment : Fragment() {
 
     private fun initListeners() {
         binding.apply {
-            btnLike.setOnClickListener {
-                postLikeOrDeleteLike()
-            }
-            btnComment.setOnClickListener {
-                openComments()
-            }
-            btnSave.setOnClickListener {
-                println("save post")
-            }
-            tvComments.setOnClickListener {
-                openComments()
-            }
+            btnLike.setOnClickListener { postLikeOrDeleteLike() }
+            btnComment.setOnClickListener { openComments() }
+            btnSave.setOnClickListener { println("save post") }
+            btnComments.setOnClickListener { openComments() }
+            btnLikes.setOnClickListener { handleGoToLikes() }
         }
     }
 
@@ -104,8 +96,8 @@ class PostDetailFragment : Fragment() {
     private fun errorState(error: String) {
         binding.pbPostDetail.isVisible = false
         if(error == "Unauthorized: invalid token") {
-            goToLogin()
-            clearSessionPreferences()
+            handleGoToLogin()
+            requireContext().clearSessionPreferences()
         }
     }
 
@@ -129,11 +121,11 @@ class PostDetailFragment : Fragment() {
                 ivVerified.isVisible = true
             }
             Glide.with(requireContext()).load(state.post.image).into(ivPost)
-            tvLike.text = state.post.likes.toString() + " likes"
+            btnLikes.text = getString(R.string.btn_likes, state.post.likes)
             tvDescription.text = state.post.user.userName
             updateTextWithBoldPrefix(tvDescription, state.post.content)
 
-            tvComments.text = "View all ${state.post.comments} comments"
+            btnComments.text = getString(R.string.btn_comments, state.post.comments)
             tvDate.text = state.post.createdAt
         }
     }
@@ -142,7 +134,7 @@ class PostDetailFragment : Fragment() {
         val deletedLikeSuccess: Map<String, Boolean> = mapOf("deleted" to true)
         val postLikeSuccess: Map<String, Boolean> = mapOf("liked" to true)
 
-        val likesString = binding.tvLike.text.toString()
+        val likesString = binding.btnLikes.text.toString()
         val currentLikes = likesString.filter { it.isDigit() }.toIntOrNull()
         when (likeState.success) {
             deletedLikeSuccess -> {
@@ -151,7 +143,7 @@ class PostDetailFragment : Fragment() {
 
                 if(currentLikes  != null) {
                     val newNumberLikesPost = currentLikes - 1
-                    binding.tvLike.text = "$newNumberLikesPost likes"
+                    binding.btnLikes.text = getString(R.string.btn_likes, newNumberLikesPost)
                 }
             }
             postLikeSuccess -> {
@@ -160,7 +152,7 @@ class PostDetailFragment : Fragment() {
 
                 if(currentLikes != null) {
                     val newNumberLikesPost = currentLikes + 1
-                    binding.tvLike.text = "$newNumberLikesPost likes"
+                    binding.btnLikes.text = getString(R.string.btn_likes, newNumberLikesPost)
                 }
             }
             else -> {
@@ -184,7 +176,13 @@ class PostDetailFragment : Fragment() {
         textView.text = spannableString
     }
 
-    private fun goToLogin() {
+    private fun handleGoToLikes() {
+        findNavController().navigate(
+            PostDetailFragmentDirections.actionPostDetailFragmentToFollowFragment(args.postId, "Likes")
+        )
+    }
+
+    private fun handleGoToLogin() {
         findNavController().navigate(
             PostDetailFragmentDirections.actionPostDetailFragmentToLoginActivity()
         )
@@ -196,23 +194,11 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun postLikeOrDeleteLike() {
-        val token = getToken()
+        val token = requireContext().getToken()
         if(likedPost) {
             postDetailViewModel.deleteLike(token, args.postId)
         } else {
             postDetailViewModel.addLike(token, args.postId)
         }
-    }
-
-    private fun clearSessionPreferences() {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
-        preferences["jwt"] = ""
-    }
-
-    private fun getToken(): String {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
-        return preferences.getString("jwt", "").toString()
     }
 }

@@ -36,10 +36,10 @@ class FollowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.label
         val token = requireContext().getToken()
-        if(args.label == "followers") {
-            followViewModel.getFollowers(token, args.userId)
-        } else {
-            followViewModel.getFollowings(token, args.userId)
+        when(args.label) {
+            "Followers" -> followViewModel.getFollowers(token, args.userId)
+            "Following" -> followViewModel.getFollowings(token, args.userId)
+            "Likes" -> followViewModel.getUsersLikedPost(token, args.userId)
         }
         initUI()
     }

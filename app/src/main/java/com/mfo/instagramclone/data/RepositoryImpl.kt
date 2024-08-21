@@ -8,7 +8,6 @@ import com.mfo.instagramclone.data.network.response.LoginResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
-import com.mfo.instagramclone.data.network.response.UserSearchResponse
 import com.mfo.instagramclone.domain.Repository
 import com.mfo.instagramclone.domain.models.LoginRequest
 import retrofit2.HttpException
@@ -95,6 +94,25 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
     }
 
     // like
+    override suspend fun getAllUsersLikedPost(token: String, postId: Long): List<FollowResponse>? {
+        runCatching {
+            val users = apiService.getAllUsersLikedPost(token, postId)
+            users.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { users -> return users }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
     override suspend fun getLikedPost(token: String, postId: Long): Boolean? {
         runCatching { apiService.getLikedPost(token, postId) }
             .onSuccess { return it }

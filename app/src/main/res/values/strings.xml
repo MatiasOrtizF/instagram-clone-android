@@ -42,12 +42,13 @@
 
     <!-- Post detail -->
     <string name="description_ic_back">Image back</string>
-    <string name="tv_post">Post</string>
     <string name="description_btn_iv_profile">Image profile</string>
     <string name="description_ic_verified">Icon verified</string>
     <string name="description_ic_like">Icon like</string>
     <string name="description_ic_comment">Icon comment</string>
     <string name="description_ic_save">Icon save</string>
+    <string name="btn_likes">%1$d likes</string>
+    <string name="btn_comments">View all %1$d comments</string>
 
     <!-- Comment -->
     <string name="tv_comment">Comments</string>

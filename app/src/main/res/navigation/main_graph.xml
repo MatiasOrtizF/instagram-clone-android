@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_postDetailFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_followFragment"
+            app:destination="@id/followFragment" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"

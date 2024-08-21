@@ -44,6 +44,12 @@ interface InstagramCloneApiService {
     ): List<CommentResponse>
 
     // like
+    @GET("like/{postId}")
+    suspend fun getAllUsersLikedPost(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): List<FollowResponse>
+
     @GET("like/user/{postId}")
     suspend fun getLikedPost(
         @Header ("Authorization") authorization: String,

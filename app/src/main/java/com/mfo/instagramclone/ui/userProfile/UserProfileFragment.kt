@@ -24,8 +24,6 @@ import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentUserProfileBinding
 import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
 import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
 import com.mfo.instagramclone.utils.ex.clearSessionPreferences
 import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,8 +87,8 @@ class UserProfileFragment : Fragment() {
         binding.apply {
             btnAddFollow.setOnClickListener { userProfileViewModel.addFollower(token, args.userId) }
             btnDeleteFollow.setOnClickListener { userProfileViewModel.deleteFollower(token, args.userId) }
-            btnFollowers.setOnClickListener { handleGoToFollow("followers") }
-            btnFollowing.setOnClickListener { handleGoToFollow("following") }
+            btnFollowers.setOnClickListener { handleGoToFollow("Followers") }
+            btnFollowing.setOnClickListener { handleGoToFollow("Following") }
         }
     }
 

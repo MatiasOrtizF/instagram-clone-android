@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide
 import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentProfileBinding
 import com.mfo.instagramclone.ui.profile.adapter.ProfileAdapter
-import com.mfo.instagramclone.ui.userProfile.UserProfileFragmentDirections
 import com.mfo.instagramclone.utils.ex.clearSessionPreferences
 import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,8 +78,8 @@ class ProfileFragment : Fragment() {
 
     private fun initListeners() {
         binding.apply {
-            btnFollowers.setOnClickListener { handleGoToFollow("followers") }
-            btnFollowing.setOnClickListener { handleGoToFollow("following") }
+            btnFollowers.setOnClickListener { handleGoToFollow("Followers") }
+            btnFollowing.setOnClickListener { handleGoToFollow("Following") }
         }
     }
 
