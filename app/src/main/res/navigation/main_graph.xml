@@ -43,11 +43,14 @@
         <action
             android:id="@+id/action_profileFragment_to_followFragment2"
             app:destination="@id/followFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/postDetailFragment"
         android:name="com.mfo.instagramclone.ui.postDetail.PostDetailFragment"
-        android:label="post"
+        android:label="Post"
         tools:layout="@layout/fragment_post_detail" >
         <argument
             android:name="postId"
@@ -108,5 +111,23 @@
         <action
             android:id="@+id/action_followFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postActionFragment"
+        android:name="com.mfo.instagramclone.ui.postActions.PostActionFragment"
+        android:label="fragment_post_action"
+        tools:layout="@layout/fragment_post_action" >
+        <argument
+            android:name="label"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.mfo.instagramclone.ui.setting.SettingFragment"
+        android:label="Settings and activity"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_postActionFragment"
+            app:destination="@id/postActionFragment" />
     </fragment>
 </navigation>

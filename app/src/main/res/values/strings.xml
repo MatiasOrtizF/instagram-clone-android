@@ -10,6 +10,8 @@
     <string name="ib_like">Icon like</string>
     <string name="iv_verified">Icon verified</string>
     <string name="iv_photo">Icon photo</string>
+    <string name="ib_setting">Icon setting</string>
+    <string name="iv_log_out">Icon log out</string>
 
     <!-- login -->
     <string name="description_ic_instagram">Icon Instagram</string>
@@ -59,5 +61,14 @@
 
     <!-- Follow -->
     <string name="tv_no_users">No users found.</string>
+
+    <!-- Settings -->
+    <string name="tv_interactions">Interactions</string>
+    <string name="tv_saved">Saved</string>
+    <string name="tv_like">Likes</string>
+    <string name="tv_dark_mode">Dark Mode</string>
+    <string name="tv_accessibility_translations">Accessibility and translations</string>
+    <string name="tv_login">Login</string>
+    <string name="tv_log_out">Log out</string>
 
 </resources>

@@ -30,6 +30,8 @@ interface Repository {
 
     // save
     suspend fun getSavedPost(token: String, postId: Long): Boolean?
+    suspend fun addSave(token: String, postId: Long): Map<String, Boolean>?
+    suspend fun deleteSave(token: String, postId: Long): Map<String, Boolean>?
 
     // search
     suspend fun getSearchUserByUserName(token: String, word: String): List<UserHistoryResponse>?

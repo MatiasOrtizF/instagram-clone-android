@@ -75,6 +75,18 @@ interface InstagramCloneApiService {
         @Path ("postId") postId: Long
     ): Boolean
 
+    @POST("save/{postId}")
+    suspend fun addSave(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Map<String, Boolean>
+
+    @DELETE("save/{postId}")
+    suspend fun deleteSave(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long
+    ): Map<String, Boolean>
+
     // search
     @GET("user/search")
     suspend fun getSearchUserByUserName(

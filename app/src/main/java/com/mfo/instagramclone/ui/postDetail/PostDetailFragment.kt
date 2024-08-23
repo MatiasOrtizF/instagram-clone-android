@@ -64,6 +64,7 @@ class PostDetailFragment : Fragment() {
                         is PostDetailState.Error -> errorState(it.error)
                         is PostDetailState.Success -> successState(it)
                         is PostDetailState.LikeSuccess -> likeSuccess(it)
+                        is PostDetailState.SaveSuccess -> saveSuccess(it)
                     }
                 }
             }
@@ -74,9 +75,9 @@ class PostDetailFragment : Fragment() {
         binding.apply {
             btnLike.setOnClickListener { postLikeOrDeleteLike() }
             btnComment.setOnClickListener { openComments() }
-            btnSave.setOnClickListener { println("save post") }
-            btnComments.setOnClickListener { openComments() }
+            btnSave.setOnClickListener { postSaveOrUnSave() }
             btnLikes.setOnClickListener { handleGoToLikes() }
+            btnComments.setOnClickListener { openComments() }
         }
     }
 
@@ -161,6 +162,25 @@ class PostDetailFragment : Fragment() {
         }
     }
 
+    private fun saveSuccess(saveState: PostDetailState.SaveSuccess) {
+        val deletedSaveSuccess: Map<String, Boolean> = mapOf("deleted" to true)
+        val postSaveSuccess: Map<String, Boolean> = mapOf("saved" to true)
+
+        when (saveState.success) {
+            deletedSaveSuccess -> {
+                binding.btnSave.setImageResource(R.drawable.ic_save)
+                savedPost = false
+            }
+            postSaveSuccess -> {
+                binding.btnSave.setImageResource(R.drawable.ic_saved)
+                savedPost = true
+            }
+            else -> {
+                Toast.makeText(requireContext(), "Failed to save post", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun updateTextWithBoldPrefix(textView: TextView, suffix: String) {
         val prefix = textView.text.toString()
         val combinedText = "$prefix $suffix"
@@ -199,6 +219,15 @@ class PostDetailFragment : Fragment() {
             postDetailViewModel.deleteLike(token, args.postId)
         } else {
             postDetailViewModel.addLike(token, args.postId)
+        }
+    }
+
+    private fun postSaveOrUnSave() {
+        val token = requireContext().getToken()
+        if(savedPost) {
+            postDetailViewModel.deleteSave(token, args.postId)
+        } else {
+            postDetailViewModel.addSave(token, args.postId)
         }
     }
 }

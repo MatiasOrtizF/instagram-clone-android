@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.mfo.instagramclone.domain.usecase.GetPostUseCase
 import com.mfo.instagramclone.domain.usecase.AddLikePostUseCase
 import com.mfo.instagramclone.domain.usecase.DeleteLikePostUseCase
+import com.mfo.instagramclone.domain.usecase.save.AddSavePostUseCase
+import com.mfo.instagramclone.domain.usecase.save.DeleteSavePostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,9 @@ import javax.inject.Inject
 class PostDetailViewModel @Inject constructor(
     private val getPostUseCase: GetPostUseCase,
     private val addLikePostUseCase: AddLikePostUseCase,
-    private val deleteLikePostUseCase: DeleteLikePostUseCase
+    private val deleteLikePostUseCase: DeleteLikePostUseCase,
+    private val addSavePostUseCase: AddSavePostUseCase,
+    private val deleteSavePostUseCase: DeleteSavePostUseCase
 ): ViewModel(){
 
     private var _state = MutableStateFlow<PostDetailState>(PostDetailState.Loading)
@@ -62,6 +66,38 @@ class PostDetailViewModel @Inject constructor(
                 val result = withContext(Dispatchers.IO) { deleteLikePostUseCase(token, postId) }
                 if(result != null) {
                     _state.value = PostDetailState.LikeSuccess(result)
+                } else {
+                    _state.value = PostDetailState.Error("Error Occurred, please try again later.")
+                }
+            } catch (e: Exception) {
+                val errorMessage: String = e.message.toString()
+                _state.value = PostDetailState.Error(errorMessage)
+            }
+        }
+    }
+
+    fun addSave(token: String, postId: Long) {
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { addSavePostUseCase(token, postId) }
+                if(result != null) {
+                    _state.value = PostDetailState.SaveSuccess(result)
+                } else {
+                    _state.value = PostDetailState.Error("Error Occurred, please try again later.")
+                }
+            } catch (e: Exception) {
+                val errorMessage: String = e.message.toString()
+                _state.value = PostDetailState.Error(errorMessage)
+            }
+        }
+    }
+
+    fun deleteSave(token: String, postId: Long) {
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { deleteSavePostUseCase(token, postId) }
+                if(result != null) {
+                    _state.value = PostDetailState.SaveSuccess(result)
                 } else {
                     _state.value = PostDetailState.Error("Error Occurred, please try again later.")
                 }

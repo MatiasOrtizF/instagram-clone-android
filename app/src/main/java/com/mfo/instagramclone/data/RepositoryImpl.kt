@@ -170,6 +170,34 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
+    override suspend fun addSave(token: String, postId: Long): Map<String, Boolean>? {
+        runCatching { apiService.addSave(token, postId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun deleteSave(token: String, postId: Long): Map<String, Boolean>? {
+        runCatching { apiService.deleteSave(token, postId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
     // Search
     override suspend fun getSearchUserByUserName(token: String, word: String): List<UserHistoryResponse>? {
         runCatching {

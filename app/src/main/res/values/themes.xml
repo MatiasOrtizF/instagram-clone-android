@@ -28,6 +28,12 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="ButtonsPostActions">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="ButtonsItemUser">
         <item name="android:visibility"></item>
     </style>

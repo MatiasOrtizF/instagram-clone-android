@@ -80,6 +80,7 @@ class ProfileFragment : Fragment() {
         binding.apply {
             btnFollowers.setOnClickListener { handleGoToFollow("Followers") }
             btnFollowing.setOnClickListener { handleGoToFollow("Following") }
+            btnSetting.setOnClickListener { handleGoToSetting() }
         }
     }
 
@@ -147,5 +148,9 @@ class ProfileFragment : Fragment() {
 
     private fun handleGoToFollow(label: String) {
         findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToFollowFragment(userId, label))
+    }
+
+    private fun handleGoToSetting() {
+        findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToSettingFragment())
     }
 }

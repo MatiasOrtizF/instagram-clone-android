@@ -73,18 +73,27 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEditProfile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/btn_edit_profile"
+            android:textAllCaps="false"
             android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnShareProfile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/btn_share_profile"
+            android:textAllCaps="false"
             android:textStyle="bold"/>
+
+        <ImageButton
+            android:id="@+id/btnSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_setting"
+            android:contentDescription="@string/ib_setting"/>
 
     </LinearLayout>
 
