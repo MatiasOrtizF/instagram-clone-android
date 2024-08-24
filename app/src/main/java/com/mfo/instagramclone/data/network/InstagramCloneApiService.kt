@@ -3,6 +3,7 @@ package com.mfo.instagramclone.data.network
 import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.FollowResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
+import com.mfo.instagramclone.data.network.response.PostActionResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
@@ -43,6 +44,11 @@ interface InstagramCloneApiService {
         @Path ("postId") postId: Long,
     ): List<CommentResponse>
 
+    @GET("comment")
+    suspend fun getAllMyComments(
+        @Header ("Authorization") authorization: String
+    ): List<PostActionResponse>
+
     // like
     @GET("like/{postId}")
     suspend fun getAllUsersLikedPost(
@@ -68,6 +74,11 @@ interface InstagramCloneApiService {
         @Path ("postId") postId: Long
     ): Map<String, Boolean>
 
+    @GET("like")
+    suspend fun getAllMyLikes(
+        @Header ("Authorization") authorization: String
+    ): List<PostActionResponse>
+
     // save
     @GET("save/{postId}")
     suspend fun getSavedPost(
@@ -86,6 +97,11 @@ interface InstagramCloneApiService {
         @Header ("Authorization") authorization: String,
         @Path ("postId") postId: Long
     ): Map<String, Boolean>
+
+    @GET("save")
+    suspend fun getAllMySave(
+        @Header ("Authorization") authorization: String
+    ): List<PostActionResponse>
 
     // search
     @GET("user/search")

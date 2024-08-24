@@ -5,6 +5,7 @@ import com.mfo.instagramclone.data.network.InstagramCloneApiService
 import com.mfo.instagramclone.data.network.response.CommentResponse
 import com.mfo.instagramclone.data.network.response.FollowResponse
 import com.mfo.instagramclone.data.network.response.LoginResponse
+import com.mfo.instagramclone.data.network.response.PostActionResponse
 import com.mfo.instagramclone.data.network.response.PostResponse
 import com.mfo.instagramclone.data.network.response.UserHistoryResponse
 import com.mfo.instagramclone.data.network.response.UserResponse
@@ -93,6 +94,25 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
+    override suspend fun getAllMyComments(token: String,): List<PostActionResponse>? {
+        runCatching {
+            val posts = apiService.getAllMyComments(token)
+            posts.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { posts -> return posts }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
     // like
     override suspend fun getAllUsersLikedPost(token: String, postId: Long): List<FollowResponse>? {
         runCatching {
@@ -155,6 +175,25 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
+    override suspend fun getAllMyLikes(token: String): List<PostActionResponse>? {
+        runCatching {
+            val posts = apiService.getAllMyLikes(token)
+            posts.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { posts -> return posts }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
     // save
     override suspend fun getSavedPost(token: String, postId: Long): Boolean? {
         runCatching { apiService.getSavedPost(token, postId) }
@@ -187,6 +226,25 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
     override suspend fun deleteSave(token: String, postId: Long): Map<String, Boolean>? {
         runCatching { apiService.deleteSave(token, postId) }
             .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getAllMySave(token: String): List<PostActionResponse>? {
+        runCatching {
+            val posts = apiService.getAllMySave(token)
+            posts.map {
+                it.toDomain()
+            }
+        }
+            .onSuccess { posts -> return posts }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()

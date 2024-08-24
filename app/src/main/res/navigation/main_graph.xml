@@ -120,6 +120,12 @@
         <argument
             android:name="label"
             app:argType="string" />
+        <action
+            android:id="@+id/action_postActionFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_postActionFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
