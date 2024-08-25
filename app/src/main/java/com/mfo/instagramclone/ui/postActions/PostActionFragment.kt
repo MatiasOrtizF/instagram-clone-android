@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentPostActionBinding
 import com.mfo.instagramclone.ui.postActions.adapter.PostActionAdapter
 import com.mfo.instagramclone.utils.ex.clearSessionPreferences
@@ -30,11 +32,10 @@ class PostActionFragment : Fragment() {
 
     private lateinit var postActionAdapter: PostActionAdapter
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val token = requireContext().getToken()
-        println(args.label)
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.label
         when(args.label) {
             "Saved" -> postActionViewModel.getAllSave(token)
             "Likes" -> postActionViewModel.getAllLikes(token)

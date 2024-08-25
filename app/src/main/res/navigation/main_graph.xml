@@ -135,5 +135,8 @@
         <action
             android:id="@+id/action_settingFragment_to_postActionFragment"
             app:destination="@id/postActionFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
     </fragment>
 </navigation>

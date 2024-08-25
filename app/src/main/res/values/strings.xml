@@ -71,4 +71,9 @@
     <string name="tv_login">Login</string>
     <string name="tv_log_out">Log out</string>
 
+    <!-- Modal -->
+    <string name="tv_title">Log out of\nyour account?</string>
+    <string name="btn_log_out">Log Out</string>
+    <string name="btn_cancel">Cancel</string>
+
 </resources>
