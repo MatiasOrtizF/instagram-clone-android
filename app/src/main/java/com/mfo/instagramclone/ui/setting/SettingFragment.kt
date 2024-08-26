@@ -1,9 +1,6 @@
 package com.mfo.instagramclone.ui.setting
 
 import android.app.AlertDialog
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,8 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentSettingBinding
 import com.mfo.instagramclone.databinding.ModalConfirmationBinding
 import com.mfo.instagramclone.ui.setting.adapter.SettingAdapter

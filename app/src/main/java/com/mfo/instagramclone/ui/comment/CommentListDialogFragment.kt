@@ -14,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mfo.instagramclone.databinding.FragmentCommentListDialogListDialogBinding
 import com.mfo.instagramclone.ui.comment.adapter.CommentAdapter
-import com.mfo.instagramclone.utils.PreferencesHelper
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val token: String = getToken()
+        val token = requireContext().getToken()
         val postId = requireArguments().getLong("postId")
         commentViewModel.getComments(token, postId)
         initUI()
@@ -115,11 +115,5 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getToken(): String {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
-        return preferences.getString("jwt", "").toString()
     }
 }

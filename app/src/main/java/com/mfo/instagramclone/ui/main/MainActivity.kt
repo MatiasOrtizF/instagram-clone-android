@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> {
                     supportActionBar?.hide()
@@ -74,9 +74,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.profileFragment -> {
                     supportActionBar?.hide()
                 }
-                /*R.id.searchDetailFragment -> {
-                    supportActionBar?.hide()
-                }*/
                 else -> {
                     supportActionBar?.show()
                 }

@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mfo.instagramclone.databinding.FragmentSearchDetailBinding
 import com.mfo.instagramclone.ui.search.adapter.SearchAdapter
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -31,7 +31,7 @@ class SearchDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchViewModel.getUsersSearchedHistory(getToken())
+        searchViewModel.getUsersSearchedHistory(requireContext().getToken())
         initUI()
     }
 
@@ -44,7 +44,7 @@ class SearchDetailFragment : Fragment() {
     private fun initList() {
         searchAdapter = SearchAdapter(
             onItemSelected = {
-                searchViewModel.addUserSearchedInHistory(getToken(), it.userId)
+                searchViewModel.addUserSearchedInHistory(requireContext().getToken(), it.userId)
                 println(it)
                 findNavController().navigate(
                     SearchDetailFragmentDirections.actionSearchDetailFragmentToUserProfileFragment(it.userId, it.userName)
@@ -76,13 +76,13 @@ class SearchDetailFragment : Fragment() {
     }
 
     private fun initListeners() {
-        val token = getToken()
+        val token = requireContext().getToken()
         binding.etSearch.addTextChangedListener {
             if(it.toString().trim().isNotEmpty()) {
                 searchViewModel.getUserSearchByUserName(token, it.toString())
                 // borrar la cruz
             } else {
-                searchViewModel.getUsersSearchedHistory(getToken())
+                searchViewModel.getUsersSearchedHistory(token)
                 // agregar la cruz
             }
         }
@@ -106,7 +106,7 @@ class SearchDetailFragment : Fragment() {
     private fun errorState(error: String) {
         if(error == "Unauthorized: invalid token") {
             goToLogin()
-            clearSessionPreferences()
+            requireContext().clearSessionPreferences()
         }
     }
 
@@ -118,28 +118,16 @@ class SearchDetailFragment : Fragment() {
         searchAdapter.updateList(state.users)
     }
 
-    private fun getToken(): String {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
-        return preferences.getString("jwt", "").toString()
-    }
-
     private fun goToLogin() {
         findNavController().navigate(
             SearchDetailFragmentDirections.actionSearchDetailFragmentToLoginActivity()
         )
     }
 
-    private fun clearSessionPreferences() {
-        val context = binding.root.context
-        val preferences = PreferencesHelper.defaultPrefs(context)
-        preferences["jwt"] = ""
-    }
-
     private fun deleteUserToHistory(id: Long, position: Int) {
         val deletedHistorySuccess: Map<String, Boolean> = mapOf("deleted" to true)
         lifecycleScope.launch {
-            val isDelete = searchViewModel.deleteUserSearchedInHistory(getToken(), id)
+            val isDelete = searchViewModel.deleteUserSearchedInHistory(requireContext().getToken(), id)
             if (isDelete == deletedHistorySuccess) {
                 searchAdapter.onDeleteItem(position)
             }

@@ -8,9 +8,8 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.mfo.instagramclone.ui.login.LoginActivity
 import com.mfo.instagramclone.ui.main.MainActivity
-import com.mfo.instagramclone.ui.main.MainState
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
+import com.mfo.instagramclone.utils.ex.getToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,16 +48,6 @@ class SplashActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun getToken(): String {
-        val preferences = PreferencesHelper.defaultPrefs(this)
-        return preferences.getString("jwt", "").toString()
-    }
-
-    private fun clearSessionPreferences() {
-        val preferences = PreferencesHelper.defaultPrefs(this)
-        preferences["jwt"] = ""
     }
 
     private fun handleGoToMain(imageProfile: String?) {

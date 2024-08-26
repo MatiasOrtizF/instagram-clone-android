@@ -6,12 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentHomeBinding
-import com.mfo.instagramclone.databinding.FragmentPostDetailBinding
-import com.mfo.instagramclone.ui.profile.ProfileFragmentDirections
-import com.mfo.instagramclone.utils.PreferencesHelper
-import com.mfo.instagramclone.utils.PreferencesHelper.set
+import com.mfo.instagramclone.utils.ex.clearSessionPreferences
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +20,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.btnLogOut.setOnClickListener {
             goToLogin()
-            clearSessionPreferences()
+            requireContext().clearSessionPreferences()
         }
     }
 
@@ -40,10 +36,5 @@ class HomeFragment : Fragment() {
         findNavController().navigate(
             HomeFragmentDirections.actionHomeFragmentToLoginActivity()
         )
-    }
-
-    private fun clearSessionPreferences() {
-        val preferences = PreferencesHelper.defaultPrefs(requireContext())
-        preferences["jwt"] = ""
     }
 }
