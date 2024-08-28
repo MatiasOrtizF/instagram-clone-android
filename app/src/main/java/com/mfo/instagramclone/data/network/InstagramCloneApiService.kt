@@ -44,12 +44,32 @@ interface InstagramCloneApiService {
         @Path ("postId") postId: Long,
     ): List<CommentResponse>
 
+    @POST("comment/{postId}")
+    suspend fun addComment(
+        @Header ("Authorization") authorization: String,
+        @Path ("postId") postId: Long,
+        @Query ("comment") comment: String
+    ): CommentResponse
+
     @GET("comment")
     suspend fun getAllMyComments(
         @Header ("Authorization") authorization: String
     ): List<PostActionResponse>
 
-    // like
+    // like comment
+    @POST("comment-like/{commentId}")
+    suspend fun addCommentLike(
+        @Header ("Authorization") authorization: String,
+        @Path ("commentId") commentId: Long
+    ): Map<String, Boolean>
+
+    @DELETE("comment-like/{commentId}")
+    suspend fun deleteCommentLike(
+        @Header ("Authorization") authorization: String,
+        @Path ("commentId") commentId: Long
+    ): Map<String, Boolean>
+
+    // like post
     @GET("like/{postId}")
     suspend fun getAllUsersLikedPost(
         @Header ("Authorization") authorization: String,

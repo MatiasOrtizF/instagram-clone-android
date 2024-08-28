@@ -6,8 +6,9 @@ data class CommentResponse (
     @SerializedName("id") val id: Long,
     @SerializedName("content") val content: String,
     @SerializedName("createdAt") val createdAt: String,
-    @SerializedName("likes") val likes: Int,
-    @SerializedName("user") val user: PostResponse.PostUser
+    @SerializedName("likes") var likes: Int,
+    @SerializedName("liked") var liked: Boolean,
+    @SerializedName("user") val user: UserComment
 ) {
 
     fun toDomain(): CommentResponse {
@@ -16,7 +17,17 @@ data class CommentResponse (
             content = content,
             createdAt = createdAt,
             likes = likes,
+            liked = liked,
             user = user
         )
     }
+
+    data class UserComment (
+        val id: Long,
+        val imageProfile: String?,
+        val userName: String,
+        val name: String,
+        val lastName: String,
+        val verified: Boolean
+    )
 }

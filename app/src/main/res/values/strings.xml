@@ -56,7 +56,7 @@
     <string name="tv_comment">Comments</string>
     <string name="tv_no_comments">No comments yet</string>
     <string name="tv_start_conversation">Start the conversation.</string>
-    <string name="hint_comment">Add a comment</string>
+    <string name="hint_comment">Add a comment for %1$s</string>
     <string name="description_ib_send_comment">Icon send</string>
 
     <!-- Follow -->

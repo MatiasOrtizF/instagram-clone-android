@@ -52,8 +52,8 @@
         android:id="@+id/rvComment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/clFooter"
         app:layout_constraintTop_toBottomOf="@+id/tvComment"/>
 
@@ -67,12 +67,13 @@
 
         <ImageButton
             android:id="@+id/ivProfile"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:src="@drawable/ic_user"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/img_profile_default"
             android:background="@drawable/bg_image_profile"
             android:scaleType="centerCrop"
             android:contentDescription="@string/iv_image_profile"
+            android:clipToOutline="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -81,7 +82,7 @@
             android:id="@+id/etComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="7dp"
+            android:layout_marginHorizontal="15dp"
             android:hint="@string/hint_comment"
             android:background="@android:color/transparent"
             android:maxLines="1"

@@ -38,6 +38,7 @@ class PostDetailFragment : Fragment() {
 
     private var likedPost: Boolean = false
     private var savedPost: Boolean = false
+    private var userName: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -103,6 +104,7 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun successState(state: PostDetailState.Success) {
+        userName = state.post.user.userName
         binding.apply {
             pbPostDetail.isVisible = false
             clPostDetail.isVisible = true
@@ -209,7 +211,7 @@ class PostDetailFragment : Fragment() {
     }
 
     private fun openComments() {
-        val dialog = CommentListDialogFragment.newInstance(args.postId)
+        val dialog = CommentListDialogFragment.newInstance(args.postId, userName)
         dialog.show(parentFragmentManager, "CommentListDialogFragment")
     }
 

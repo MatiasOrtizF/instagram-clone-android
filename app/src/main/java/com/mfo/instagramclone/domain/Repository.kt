@@ -22,8 +22,12 @@ interface Repository {
 
     // comment
     suspend fun getComments(token: String, postId: Long): List<CommentResponse>?
+    suspend fun addComment(token: String, postId: Long, comment: String): CommentResponse?
     suspend fun getAllMyComments(token: String): List<PostActionResponse>?
 
+    // like comment
+    suspend fun addCommentLike(token: String, commentId: Long): Map<String, Boolean>?
+    suspend fun deleteCommentLike(token: String, commentId: Long): Map<String, Boolean>?
     // like
     suspend fun getAllUsersLikedPost(token: String, postId: Long): List<FollowResponse>?
     suspend fun getLikedPost(token: String, postId: Long): Boolean?

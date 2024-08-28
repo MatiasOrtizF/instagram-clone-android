@@ -12,9 +12,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mfo.instagramclone.R
 import com.mfo.instagramclone.databinding.FragmentCommentListDialogListDialogBinding
 import com.mfo.instagramclone.ui.comment.adapter.CommentAdapter
 import com.mfo.instagramclone.utils.ex.getToken
+import com.mfo.instagramclone.utils.ex.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,11 +29,13 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     private val commentViewModel: CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
 
+
     companion object {
-        fun newInstance(postId: Long): CommentListDialogFragment {
+        fun newInstance(postId: Long, userName: String): CommentListDialogFragment {
             val fragment = CommentListDialogFragment()
             val args = Bundle()
             args.putLong("postId", postId)
+            args.putString("userName", userName)
             fragment.arguments = args
             return fragment
         }
@@ -41,7 +45,9 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val token = requireContext().getToken()
         val postId = requireArguments().getLong("postId")
+        val userName = requireArguments().getString("userName")
         commentViewModel.getComments(token, postId)
+        binding.etComment.hint = getString(R.string.hint_comment, userName)
         initUI()
     }
 
@@ -56,6 +62,10 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
             onItemSelected = {
                 println(it.id)
             },
+            onItemLiked = { commentId, position, liked ->
+                println("like comment: $commentId en la posicion $position")
+                handleDeleteOrAddLike(commentId, liked, position)
+            }
         )
         binding.rvComment.apply {
             layoutManager = LinearLayoutManager(context)
@@ -71,6 +81,8 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
                         CommentState.Loading -> loadingState()
                         is CommentState.Error -> errorState(it.error)
                         is CommentState.Success -> successSate(it)
+                        is CommentState.SendSuccess -> sendSuccess(it)
+                        is CommentState.LikeSuccess -> likeSuccess(it)
                     }
                 }
             }
@@ -78,16 +90,16 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initListeners() {
-
+        binding.btnSend.setOnClickListener { handleSendMessage(binding.etComment.text.toString()) }
     }
 
     private fun loadingState() {
         binding.pbComment.isVisible = true
+        binding.rvComment.isVisible = false
     }
 
     private fun errorState(error: String) {
         binding.pbComment.isVisible = false
-        val context = binding.root.context
         Toast.makeText(context, "Error: $error", Toast.LENGTH_SHORT).show()
     }
 
@@ -103,6 +115,29 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun sendSuccess(state: CommentState.SendSuccess) {
+        commentAdapter.onAddItem(state.comment)
+        binding.pbComment.isVisible = false
+        binding.rvComment.isVisible = true
+        binding.btnSend.isEnabled = true
+    }
+
+    private fun likeSuccess(state: CommentState.LikeSuccess) {
+        val postLikeSuccess: Map<String, Boolean> = mapOf("liked" to true)
+        val deletedLikeSuccess: Map<String, Boolean> = mapOf("deleted" to true)
+
+        when (state.success) {
+            postLikeSuccess -> {
+                commentAdapter.updateLikeState(state.position, true)
+            }
+            deletedLikeSuccess -> {
+                commentAdapter.updateLikeState(state.position, false)
+            }
+            else -> {
+                Toast.makeText(requireContext(), "Failed to like post", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,5 +150,23 @@ class CommentListDialogFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun handleSendMessage(comment: String) {
+        if(comment.trim().isNotEmpty()) {
+            val postId = requireArguments().getLong("postId")
+            commentViewModel.addComment(requireContext().getToken(), postId, comment)
+            hideKeyboard()
+            binding.etComment.setText("")
+            binding.btnSend.isEnabled = false
+        }
+    }
+
+    private fun handleDeleteOrAddLike(commentId: Long, liked: Boolean, position: Int) {
+        if(liked) {
+            commentViewModel.deleteCommentLike(requireContext().getToken(), commentId, position)
+        } else {
+            commentViewModel.addCommentLike(requireContext().getToken(), commentId, position)
+        }
     }
 }

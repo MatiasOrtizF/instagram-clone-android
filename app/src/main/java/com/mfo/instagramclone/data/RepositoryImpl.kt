@@ -94,7 +94,21 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
         return null
     }
 
-    override suspend fun getAllMyComments(token: String,): List<PostActionResponse>? {
+    override suspend fun addComment(token: String, postId: Long, comment: String): CommentResponse? {
+        runCatching { apiService.addComment(token, postId, comment) }
+            .onSuccess { return it.toDomain() }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun getAllMyComments(token: String): List<PostActionResponse>? {
         runCatching {
             val posts = apiService.getAllMyComments(token)
             posts.map {
@@ -102,6 +116,35 @@ class RepositoryImpl @Inject constructor(private val apiService: InstagramCloneA
             }
         }
             .onSuccess { posts -> return posts }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    // comment like
+    override suspend fun addCommentLike(token: String, commentId: Long): Map<String, Boolean>? {
+        runCatching { apiService.addCommentLike(token, commentId) }
+            .onSuccess { return it }
+            .onFailure { throwable ->
+                val errorMessage = when (throwable) {
+                    is HttpException -> throwable.response()?.errorBody()?.string()
+                    else -> null
+                } ?: "An error occurred: ${throwable.message}"
+                Log.i("mfo", "Error occurred: $errorMessage")
+                throw Exception(errorMessage)
+            }
+        return null
+    }
+
+    override suspend fun deleteCommentLike(token: String, commentId: Long): Map<String, Boolean>? {
+        runCatching { apiService.deleteCommentLike(token, commentId) }
+            .onSuccess { return it }
             .onFailure { throwable ->
                 val errorMessage = when (throwable) {
                     is HttpException -> throwable.response()?.errorBody()?.string()
