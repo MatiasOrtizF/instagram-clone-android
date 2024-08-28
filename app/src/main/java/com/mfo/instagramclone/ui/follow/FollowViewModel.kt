@@ -77,12 +77,12 @@ class FollowViewModel @Inject constructor(
         }
     }
 
-    fun addFollower(token: String, userId: Long) {
+    fun addFollower(token: String, userId: Long, position: Int) {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) { postFollowerUseCase(token, userId) }
                 if(result != null) {
-                    _state.value = FollowState.FollowSuccess(result)
+                    _state.value = FollowState.FollowSuccess(result, position)
                 } else {
                     _state.value = FollowState.Error("Error Occurred, please try again later.")
                 }
@@ -93,12 +93,12 @@ class FollowViewModel @Inject constructor(
         }
     }
 
-    fun deleteFollower(token: String, userId: Long) {
+    fun deleteFollower(token: String, userId: Long, position: Int) {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) { deleteFollowerUseCase(token, userId) }
                 if(result != null) {
-                    _state.value = FollowState.FollowSuccess(result)
+                    _state.value = FollowState.FollowSuccess(result, position)
                 } else {
                     _state.value = FollowState.Error("Error Occurred, please try again later.")
                 }

@@ -6,5 +6,5 @@ sealed class FollowState {
     data object Loading : FollowState()
     data class Error(val error: String) : FollowState()
     data class Success(val users: List<FollowResponse>) : FollowState()
-    data class FollowSuccess(val success: Map<String, Boolean>?): FollowState()
+    data class FollowSuccess(val success: Map<String, Boolean>?, val position: Int): FollowState()
 }

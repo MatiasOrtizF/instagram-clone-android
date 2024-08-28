@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -57,8 +59,8 @@ class FollowFragment : Fragment() {
                     FollowFragmentDirections.actionFollowFragmentToUserProfileFragment(it.id, it.userName)
                 )
             },
-            onFollowToggleButtonClick = {
-                handleDeleteOrPostFollower(it.followed, requireContext().getToken(), it.id)
+            onFollowToggleButtonClick = { id, followed, position ->
+                handleDeleteOrPostFollower(id, followed, position)
                 //deleteUserToHistory(id, position)
             }
         )
@@ -84,7 +86,9 @@ class FollowFragment : Fragment() {
     }
 
     private fun initListeners() {
-
+        binding.etSearch.addTextChangedListener {
+            followAdapter.filterList(it.toString())
+        }
     }
 
     override fun onCreateView(
@@ -120,15 +124,28 @@ class FollowFragment : Fragment() {
     }
 
     private fun followSuccess(followState: FollowState.FollowSuccess) {
-        val deletedFollowerSuccess: Map<String, Boolean> = mapOf("unfollowed" to true)
         val postFollowerSuccess: Map<String, Boolean> = mapOf("following" to true)
+        val deletedFollowerSuccess: Map<String, Boolean> = mapOf("unfollowed" to true)
+
+        when (followState.success) {
+            postFollowerSuccess -> {
+                followAdapter.updateFollowState(followState.position, true)
+            }
+            deletedFollowerSuccess -> {
+                followAdapter.updateFollowState(followState.position, false)
+            }
+            else -> {
+                Toast.makeText(requireContext(), "Failed to follow user", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
-    private fun handleDeleteOrPostFollower(followed: Boolean, token: String, userId: Long) {
+    private fun handleDeleteOrPostFollower(userId: Long, followed: Boolean, position: Int) {
+        val token = requireContext().getToken()
         if(followed) {
-            followViewModel.deleteFollower(token, userId)
+            followViewModel.deleteFollower(token, userId, position)
         } else {
-            followViewModel.addFollower(token, userId)
+            followViewModel.addFollower(token, userId, position)
         }
     }
 
